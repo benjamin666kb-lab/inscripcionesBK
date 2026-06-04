@@ -1,0 +1,203 @@
+<?php
+
+session_start();
+include("sesion_check.php"); // 🔥 PRIMERO control de tiempo
+if(!isset($_SESSION['id_admin'])){
+    header("Location: login.php");
+    exit;
+}
+include("../../db.php");
+
+// 🔥 Estadísticas
+$total = $conn->query("
+SELECT COUNT(*) total FROM inscritos
+")->fetch_assoc();
+
+$pagados = $conn->query("
+SELECT COUNT(*) total FROM inscritos WHERE estado_pago='PAGADO'
+")->fetch_assoc();
+
+$pendientes = $conn->query("
+SELECT COUNT(*) total FROM inscritos WHERE estado_pago='PENDIENTE'
+")->fetch_assoc();
+
+$libres = $conn->query("
+SELECT COUNT(*) total 
+FROM inscritos 
+WHERE estado_pago IS NULL 
+   OR estado_pago = '' 
+   OR UPPER(TRIM(estado_pago)) NOT IN ('PAGADO','PENDIENTE')
+")->fetch_assoc();
+
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#f4f6f9;
+}
+
+.topbar{
+background:#198754;
+color:white;
+padding:15px 30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.card-box{
+border:none;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+transition:.3s;
+}
+.card-box:hover{
+    transform: translateY(-5px);
+}
+.numero{
+font-size:2.5rem;
+font-weight:900;
+}
+
+.menu-acciones a{
+margin-right:10px;
+margin-bottom:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="topbar">
+
+<div>
+🏃 Estación88 Admin
+</div>
+
+<div>
+<?php echo $_SESSION['nombre']; ?> |
+<?php echo $_SESSION['rol']; ?> |
+
+<a href="logout.php" class="btn btn-light btn-sm">
+Salir
+</a>
+
+</div>
+
+</div>
+
+<div class="container mt-4">
+
+<h2 class="mb-4">Panel Principal</h2>
+
+<div class="row">
+
+<!-- INSCRITOS -->
+<div class="col-md-3 mb-3">
+<div class="card card-box">
+<div class="card-body text-center">
+<div class="numero">
+<?php echo $total['total']; ?>
+</div>
+<div>👥 Inscritos</div>
+</div>
+</div>
+</div>
+
+<!-- PAGADOS -->
+<div class="col-md-3 mb-3">
+<div class="card card-box">
+<div class="card-body text-center">
+<div class="numero text-success">
+<?php echo $pagados['total']; ?>
+</div>
+<div>💰 Pagados</div>
+</div>
+</div>
+</div>
+
+<!-- PENDIENTES -->
+<div class="col-md-3 mb-3">
+<div class="card card-box">
+<div class="card-body text-center">
+<div class="numero text-warning">
+<?php echo $pendientes['total']; ?>
+</div>
+<div>⏳ Pendientes</div>
+</div>
+</div>
+</div>
+
+<!-- LIBRES -->
+<div class="col-md-3 mb-3">
+<div class="card card-box">
+<div class="card-body text-center">
+<div class="numero text-primary">
+<?php echo $libres['total']; ?>
+</div>
+<div>🆓 Libres</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<hr>
+
+<!-- BOTONES DE ACCIÓN -->
+<div class="menu-acciones">
+
+<a href="inscritos.php" class="btn btn-success">
+👥 Ver Inscritos
+</a>
+
+<a href="exportar_excel.php" class="btn btn-primary">
+📊 Exportar Excel
+</a>
+
+<?php if($_SESSION['rol'] == 'ADMIN'){ ?>
+
+<div class="d-flex gap-2 flex-wrap">
+
+<a href="crear_evento.php" class="btn btn-warning">
+🎟 Crear Evento
+</a>
+
+<a href="eventos_lista.php" class="btn btn-warning">
+🛠️ Editar Eventos
+</a>
+
+<a href="crear_usuario.php" class="btn btn-warning">
+👤 Crear Usuario
+</a>
+
+</div>
+
+<?php } ?>
+</div>
+
+</div>
+
+</body>
+</html>
