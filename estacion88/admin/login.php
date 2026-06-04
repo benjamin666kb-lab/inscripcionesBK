@@ -170,7 +170,38 @@ opacity:.9;
     background:rgba(255,255,255,0.25);
     color:white;
 }
+.btn-publico{
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
 
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    padding:10px 18px;
+
+    background:#fff;
+    color:#555;
+    text-decoration:none;
+    font-weight:600;
+
+    border:1px solid #dcdfe4;
+    border-radius:12px;
+
+    transition:.25s;
+}
+
+.btn-publico:hover{
+    background:#f8f9fa;
+    color:#198754;
+    border-color:#198754;
+    transform:translateY(-2px);
+    text-decoration:none;
+
+    box-shadow:0 6px 15px rgba(25,135,84,.10);
+}
 </style>
 
 </head>
@@ -222,5 +253,10 @@ opacity:.9;
 </body>
 <a href="../index.php" class="back-index">
 ← Volver al inicio
+</a>
+<a href="https://inscripcionesbk.free.nf/estacion88/index.php"
+   class="btn-publico"
+   target="_blank">
+    🌐 Ver Estación88 -> Eventos
 </a>
 </html>

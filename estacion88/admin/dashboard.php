@@ -79,10 +79,87 @@ font-weight:900;
 }
 
 .menu-acciones a{
-margin-right:10px;
-margin-bottom:10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    margin-right: 10px;
+    margin-bottom: 12px;
+    border-radius: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 6px 15px rgba(0,0,0,.08);
+    transition: all .25s ease;
+}
+.menu-acciones a:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(0,0,0,.15);
 }
 
+.menu-acciones a:active{
+    transform: scale(.98);
+}
+.btn-admin{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 14px 28px;
+    border-radius: 16px;
+
+    background: linear-gradient(135deg,#7b2ff7,#f107a3);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    letter-spacing: .3px;
+
+    border: none;
+
+    box-shadow:
+        0 10px 25px rgba(123,47,247,.25);
+
+    transition: all .3s ease;
+}
+
+.btn-admin:hover{
+    color:#fff;
+    text-decoration:none;
+    transform: translateY(-5px) scale(1.03);
+
+    box-shadow:
+        0 18px 35px rgba(123,47,247,.35);
+}
+
+.btn-admin:active{
+    transform: scale(.98);
+}
+.btn-publico{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    padding:10px 18px;
+
+    background:#fff;
+    color:#555;
+    text-decoration:none;
+    font-weight:600;
+
+    border:1px solid #dcdfe4;
+    border-radius:12px;
+
+    transition:.25s;
+}
+
+.btn-publico:hover{
+    background:#f8f9fa;
+    color:#198754;
+    border-color:#198754;
+    transform:translateY(-2px);
+    text-decoration:none;
+
+    box-shadow:0 6px 15px rgba(25,135,84,.10);
+}
 </style>
 
 </head>
@@ -178,23 +255,34 @@ Salir
 
 <?php if($_SESSION['rol'] == 'ADMIN'){ ?>
 
-<div class="d-flex gap-2 flex-wrap">
+<hr>
 
-<a href="crear_evento.php" class="btn btn-warning">
-🎟 Crear Evento
-</a>
+<h5 class="mb-3 text-secondary">
+🔐 Herramientas de Administración
+</h5>
 
-<a href="eventos_lista.php" class="btn btn-warning">
-🛠️ Editar Eventos
-</a>
+<div class="d-flex gap-3 flex-wrap">
 
-<a href="crear_usuario.php" class="btn btn-warning">
-👤 Crear Usuario
-</a>
+    <a href="crear_evento.php" class="btn-admin">
+        🎟 Crear Evento
+    </a>
+
+    <a href="eventos_lista.php" class="btn-admin">
+        🛠 Editar Eventos
+    </a>
+
+    <a href="crear_usuario.php" class="btn-admin">
+        👤 Crear Usuario
+    </a>
 
 </div>
 
 <?php } ?>
+<a href="https://inscripcionesbk.free.nf/estacion88/index.php"
+   class="btn-publico"
+   target="_blank">
+    🌐 Ver Estación88 -> Eventos
+</a>
 </div>
 
 </div>

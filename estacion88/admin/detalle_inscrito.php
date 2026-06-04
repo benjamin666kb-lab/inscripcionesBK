@@ -273,7 +273,7 @@ S/ <?php echo number_format($inscrito['monto'],2); ?>
 <hr>
 
 <div class="d-flex gap-2">
-<?php if($_SESSION['rol'] == 'Administrador'){ ?>
+<?php if($_SESSION['rol'] == 'ADMIN'){ ?>
 
 <a
 href="confirmar_pago.php?id=<?php echo $inscrito['id']; ?>"

@@ -47,7 +47,7 @@ if(isset($_POST['actualizar'])){
         $ext = pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION);
         $imagen = time() . "." . $ext;
 
-        move_uploaded_file($_FILES['imagen']['tmp_name'], "../uploads/" . $imagen);
+        move_uploaded_file($_FILES['imagen']['tmp_name'], "../../uploads/" . $imagen);
     }
 
     $update = $conn->prepare("
@@ -151,7 +151,7 @@ label{
     <div class="top-actions">
 
     <!-- 🔙 VOLVER -->
-    <a href="javascript:history.back()" class="btn-back">
+    <a href="dashboard.php" class="btn-back">
         🔙 Volver
     </a>
 
@@ -225,8 +225,21 @@ value="<?php echo $evento['fecha_evento']; ?>" required>
 <label>Imagen actual</label><br>
 
 <?php if(!empty($evento['imagen_portada'])){ ?>
-    <img src="../uploads/<?php echo $evento['imagen_portada']; ?>" width="150">
-<?php } ?>
+    <img src="../../uploads/<?php echo $evento['imagen_portada']; ?>" width="150" style="
+                width:220px;
+                max-width:100%;
+                border-radius:15px;
+                border:3px solid #e5e7eb;
+                padding:4px;
+                background:white;
+                box-shadow:0 5px 15px rgba(0,0,0,.15);
+            ">
+            <?php }else{ ?>
+
+        <div class="alert alert-secondary mt-2">
+            No hay imagen cargada.
+        </div>
+            <?php } ?>
 
 </div>
 

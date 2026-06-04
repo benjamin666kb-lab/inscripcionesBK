@@ -157,7 +157,7 @@ body{
 <div class="top-actions">
 
     <!-- 🔙 VOLVER -->
-    <a href="javascript:history.back()" class="btn-back">
+    <a href="dashboard.php" class="btn-back">
         🔙 Volver
     </a>
 

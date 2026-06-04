@@ -11,7 +11,11 @@ if(!isset($_SESSION['id_admin'])){
 $sql = "SELECT * FROM eventos ORDER BY fecha_evento DESC";
 $result = $conn->query($sql);
 ?>
-
+<?php if(isset($_GET['editado'])){ ?>
+<div class="alert alert-success text-center fade-msg">
+    🎉 Cambios guardados con éxito
+</div>
+<?php } ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -114,7 +118,15 @@ h2{
 .container{
     padding-top:30px;
 }
+.fade-msg{
+    animation: fadeOut 4s forwards;
+}
 
+@keyframes fadeOut{
+    0%{opacity:1;}
+    80%{opacity:1;}
+    100%{opacity:0; display:none;}
+}
 </style>
 </head>
 

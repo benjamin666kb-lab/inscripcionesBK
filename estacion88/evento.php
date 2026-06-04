@@ -34,8 +34,6 @@ body{
     color:white;
     font-family:Arial;
 }
-
-/* HERO */
 .hero{
     min-height:70vh;
     display:flex;
@@ -43,15 +41,9 @@ body{
     justify-content:center;
     align-items:center;
     text-align:center;
-
-    background:
-    linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.7)),
-    url('uploads/<?php echo $ev['imagen_portada']; ?>');
-
-    background-size:cover;
-    background-position:center;
-
+    position: relative;
     padding:40px;
+    color: #fff;
 }
 
 .hero h1{
@@ -140,20 +132,27 @@ body{
 
 <body>
 
+
 <!-- 🔥 HERO -->
-<div class="hero">
+<div class="hero" style="
+    background:
+        linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.7)),
+        url('../uploads/<?php echo $ev['imagen_portada']; ?>');
+    background-size: cover;
+    background-position: center;
+">
+    
+    <span class="badge-event">🎟 Evento Oficial</span>
 
-<span class="badge-event">🎟 Evento Oficial</span>
+    <h1><?php echo $ev['nombre']; ?></h1>
 
-<h1><?php echo $ev['nombre']; ?></h1>
+    <p><?php echo $ev['descripcion']; ?></p>
 
-<p><?php echo $ev['descripcion']; ?></p>
+    <p>📅 <?php echo $ev['fecha_evento']; ?></p>
 
-<p>📅 <?php echo $ev['fecha_evento']; ?></p>
-
-<a href="inscripcion.php?evento_id=<?php echo $ev['id']; ?>">
-    <button class="btn-inscribirme">🚀 INSCRIBIRME AHORA</button>
-</a>
+    <a href="inscripcion.php?evento_id=<?php echo $ev['id']; ?>">
+        <button class="btn-inscribirme">🚀 INSCRIBIRME AHORA</button>
+    </a>
 
 </div>
 

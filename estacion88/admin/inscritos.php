@@ -208,11 +208,6 @@ if($estado === "PAGADO"){ ?>
 
     <?php if($esOperador || $esAdmin){ ?>
 
-        <!-- PAGAR -->
-        <a href="marcar_pagado.php?id=<?= $row['id'] ?>" class="btn btn-success btn-sm mb-1">
-            Pagado
-        </a>
-
         <!-- EDITAR -->
         <a href="editar_inscrito.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm mb-1">
             Editar
