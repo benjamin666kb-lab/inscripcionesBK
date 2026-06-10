@@ -1,26 +1,18 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 
-// 🚫 Evitar que el navegador guarde páginas protegidas
+// 🚫 Evitar caché
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Pragma: no-cache");
 header("Expires: 0");
 
-$tiempo_limite = 600; // 10 minutos
+$tiempo_limite = 600;
 
-// si no existe tiempo de actividad
+// Si no existe tiempo de actividad
 if (!isset($_SESSION['ultima_actividad'])) {
     $_SESSION['ultima_actividad'] = time();
 }
 
-// tiempo transcurrido
-$inactividad = time() - $_SESSION['ultima_actividad'];
-
-if ($inactividad > $tiempo_limite) {
-
-    // destruir sesión
+if ((time() - $_SESSION['ultima_actividad']) > $tiempo_limite) {
     session_unset();
     session_destroy();
 
@@ -28,6 +20,4 @@ if ($inactividad > $tiempo_limite) {
     exit;
 }
 
-// actualizar tiempo cada vez que navega
 $_SESSION['ultima_actividad'] = time();
-?>

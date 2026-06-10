@@ -264,17 +264,67 @@ $inscrito = $resultado->fetch_assoc();
     </div>
 
 </div>
-
+<script src="https://js.culqi.com/checkout-js"></script>
 <script>
+
+const settings = {
+    title: "Shrek Run",
+    currency: "PEN",
+    amount: <?php echo intval($inscrito['monto'] * 100); ?>
+};
+
+const client = {
+    email: "prueba@correo.com"
+};
+
+const options = {
+    lang: "es",
+    paymentMethods: {
+        tarjeta: true,
+        yape: true,
+        billetera: true,
+        bancaMovil: true,
+        agente: false,
+        cuotealo: false
+    }
+};
+
+const config = {
+    settings,
+    client,
+    options
+};
+
+const publicKey = "pk_test_8j86Lmv2KMRWu9xP";
+
+const Culqi = new CulqiCheckout(publicKey, config);
+
+const handleCulqiAction = () => {
+
+   if (Culqi.token) {
+
+    const token = Culqi.token.id;
+
+    window.location.href =
+    "procesar_pago.php?id=<?php echo $inscrito['id']; ?>&token=" + token;
+
+}else {
+
+        console.log(Culqi.error);
+
+    }
+
+};
+
+Culqi.culqi = handleCulqiAction;
 
 document
 .getElementById("btnPagar")
-.addEventListener("click",function(){
-    this.disabled = true;
-    this.innerHTML = "Procesando... 💳";
+.addEventListener("click", function(e){
 
-    window.location.href =
-    "procesar_pago.php?id=<?php echo $inscrito['id']; ?>";
+    Culqi.open();
+
+    e.preventDefault();
 
 });
 
