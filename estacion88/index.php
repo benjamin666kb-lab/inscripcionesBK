@@ -92,7 +92,58 @@ body{
 </head>
 
 <body>
+<section class="container my-5">
 
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-body p-4 text-center">
+
+            <h2 class="fw-bold mb-3">
+                🔎 Consultar mi inscripción
+            </h2>
+
+            <p class="text-muted">
+                Ingresa tu DNI para buscar tus tickets registrados.
+            </p>
+
+            <form action="buscar_ticket.php" method="GET">
+
+                <div class="row justify-content-center">
+
+                    <div class="col-md-6">
+
+                        <input
+                            type="text"
+                            name="dni"
+                            class="form-control form-control-lg"
+                            maxlength="8"
+                            pattern="[0-9]{8}"
+                            placeholder="Ingrese su DNI"
+                            required>
+
+                    </div>
+
+                    <div class="col-md-2 mt-3 mt-md-0">
+
+                        <button
+                            type="submit"
+                            class="btn btn-success btn-lg w-100">
+
+                            Buscar
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
 <div class="container">
 
 <h1 class="title">🎟 Eventos Disponibles</h1>

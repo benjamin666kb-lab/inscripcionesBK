@@ -201,6 +201,28 @@ opacity:.9;
 
     box-shadow:0 6px 15px rgba(25,135,84,.10);
 }
+@media (max-width: 576px){
+
+    .back-index{
+        position:fixed;
+        top:15px;
+        left:15px;
+        font-size:12px;
+        padding:8px 10px;
+        z-index:9999;
+    }
+
+    .btn-publico{
+        position:fixed;
+        top:60px; /* debajo del botón volver */
+        right:15px;
+        font-size:12px;
+        padding:8px 10px;
+        max-width:180px;
+        text-align:center;
+    }
+
+}
 </style>
 
 </head>
@@ -220,12 +242,18 @@ opacity:.9;
     <?php echo htmlspecialchars($error); ?>
 </div>
 <?php } ?>
-<?php if(isset($_GET['timeout'])){ ?>
-
-<div class="alert alert-warning shadow-sm">
+<?php if(isset($_GET['expirado'])){ ?>
+<div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
     ⏱ Sesión expirada por inactividad. Por seguridad, vuelve a iniciar sesión.
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
+<?php } ?>
 
+<?php if(isset($_GET['mensaje'])){ ?>
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <?= htmlspecialchars($_GET['mensaje']) ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
 <?php } ?>
 <form method="POST">
 
@@ -248,7 +276,7 @@ opacity:.9;
 </form>
 
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 <a href="../index.php" class="back-index">
 ← Volver al inicio

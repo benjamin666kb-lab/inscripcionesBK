@@ -185,7 +185,15 @@ body{
 </div>
 
 <div class="formulario">
-
+<!-- 🔥 MENSAJE DE ERROR -->
+<?php
+session_start();
+if(isset($_SESSION['error'])){
+?>
+<div class="alert alert-danger">
+    <?= $_SESSION['error']; unset($_SESSION['error']); ?>
+</div>
+<?php } ?>
 <div class="info-box">
 
 <h5>🎯 Completa tu inscripción</h5>
@@ -216,6 +224,8 @@ Llena tus datos correctamente para participar oficialmente en el evento.
 <label class="form-label">Teléfono</label>
 <input type="text" name="telefono" class="form-control" required>
 </div>
+<!--MENSAJED DE ALERTA!!--><!--MENSAJED DE ALERTA!!--><!--MENSAJED DE ALERTA!!-->
+<div id="mensaje-alerta" style="color:red;font-weight:600;margin-bottom:10px;"></div>
 
 <div class="col-md-6 mb-3">
 <label class="form-label">Correo Electrónico</label>
@@ -254,8 +264,8 @@ Llena tus datos correctamente para participar oficialmente en el evento.
 <option value="">Seleccione</option>
 <option value="5K">🏃 5K</option>
 <option value="10K">🔥 10K</option>
-<option value="10K">🔥 15K</option>
-<option value="10K">🔥🏃 20K</option>
+<option value="15K">🔥 15K</option>
+<option value="20K">🔥🏃 20K</option>
 </select>
 </div>
 
@@ -274,10 +284,16 @@ Llena tus datos correctamente para participar oficialmente en el evento.
 
 <div class="col-12">
 
-<button type="submit" class="btn-inscribirse">
+<button type="submit" class="btn-inscribirse" id="btn-submit">
 🚀 CONTINUAR INSCRIPCIÓN
 </button>
-
+<a
+id="btn-ticket"
+href="#"
+class="btn btn-primary mt-3 w-100"
+style="display:none; border-radius:50px; padding:15px; font-weight:700;">
+🎫 VER MI TICKET
+</a>
 </div>
 
 </form>
@@ -291,7 +307,77 @@ Llena tus datos correctamente para participar oficialmente en el evento.
 </div>
 
 </div>
+<script>
 
+let timeout = null;
+
+function verificarInscripcion(){
+
+    clearTimeout(timeout);
+
+    timeout = setTimeout(() => {
+
+        let dni = document.querySelector('input[name="dni"]').value.trim();
+        let telefono = document.querySelector('input[name="telefono"]').value.trim();
+        let evento_id = document.querySelector('input[name="evento_id"]').value;
+
+        if(dni.length < 6 && telefono.length < 6){
+            return;
+        }
+
+        fetch("verificar_dni_celular.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: "dni="+dni+"&telefono="+telefono+"&evento_id="+evento_id
+        })
+        .then(res => res.text())
+        .then(data => {
+
+            let msg = document.getElementById("mensaje-alerta");
+            let btn = document.getElementById("btn-submit")
+
+            let partes = data.trim().split("|");
+
+if(partes[0] === "EXISTE"){
+
+    let codigo = partes[1];
+
+    msg.innerHTML =
+        "⚠️ Ya tienes un ticket creado para este evento.";
+
+    btn.disabled = true;
+    btn.style.opacity = "0.5";
+
+    let btnTicket = document.getElementById("btn-ticket");
+
+    btnTicket.style.display = "block";
+
+    btnTicket.href =
+        "ticket.php?codigo=" + codigo;
+
+
+            }else{
+                msg.innerHTML = "";
+                btn.disabled = false;
+                btn.style.opacity = "1";
+                document.getElementById("btn-ticket").style.display = "none";
+            }
+        });
+
+    }, 400); // 🔥 debounce 400ms
+}
+
+// esperar a que cargue todo el DOM
+window.addEventListener("DOMContentLoaded", function(){
+
+    document.querySelector('input[name="dni"]').addEventListener("input", verificarInscripcion);
+    document.querySelector('input[name="telefono"]').addEventListener("input", verificarInscripcion);
+
+});
+
+</script>
 </body>
 <a href="javascript:history.back()" class="btn-volver">
 ← Volver

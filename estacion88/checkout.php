@@ -21,7 +21,37 @@ if($resultado->num_rows == 0){
 }
 
 $inscrito = $resultado->fetch_assoc();
+$estadosBloqueados = ['PAGADO','LIBRE'];
 
+if(in_array($inscrito['estado_pago'], $estadosBloqueados)){
+
+    die("
+    <div style='
+        font-family:Arial;
+        max-width:600px;
+        margin:50px auto;
+        padding:20px;
+        text-align:center;
+        border:1px solid #ddd;
+        border-radius:15px;
+        background:#f8f9fa;
+    '>
+
+        <h2 style='color:green'>
+        ✅ Esta inscripción ya fue completada
+        </h2>
+
+        <p>
+        El ticket <b>{$inscrito['codigo']}</b> ya no requiere pago.
+        </p>
+
+        <a href='ticket.php?codigo={$inscrito['codigo']}'>
+            Ver Ticket
+        </a>
+
+    </div>
+    ");
+}
 ?>
 
 <!DOCTYPE html>
@@ -182,7 +212,28 @@ $inscrito = $resultado->fetch_assoc();
     transform:translateY(-3px);
 
     }
+    .btn-volver{
+    position:fixed;
+    top:20px;
+    left:20px;
+    background:rgba(255,255,255,0.15);
+    color:white;
+    padding:8px 14px;
+    border-radius:30px;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:600;
+    backdrop-filter: blur(10px);
+    border:1px solid rgba(255,255,255,0.2);
+    transition:.3s;
+    z-index:999;
+    }
 
+    .btn-volver:hover{
+    transform:translateY(-2px);
+    background:rgba(255,255,255,0.25);
+    color:white;
+    }
 </style>
 
 </head>
@@ -331,4 +382,7 @@ document
 </script>
 
 </body>
+<a href="index.php" class="btn-volver">
+← Inicio
+</a>
 </html>

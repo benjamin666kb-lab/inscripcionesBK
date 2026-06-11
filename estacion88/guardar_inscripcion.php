@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
+session_start();
 include("../db.php");
 
 // 🔥 DATOS DEL FORMULARIO
@@ -9,6 +9,7 @@ $evento_id = $_POST['evento_id'] ?? 0;
 $kit_id    = $_POST['kit_id'] ?? 0;
 
 $nombre    = trim($_POST['nombre']);
+
 $dni       = trim($_POST['dni']);
 $telefono  = trim($_POST['telefono']);
 $correo    = trim($_POST['correo']);
@@ -56,6 +57,9 @@ $prefijo = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $evento_nombre), 0,
 
 // 🔥 GENERAR CÓDIGO FINAL
 $codigo = $prefijo . "-" . date("Y") . "-" . strtoupper(substr(md5(uniqid()), 0, 6));
+
+$dni = trim(preg_replace('/\s+/', '', $dni));
+$telefono = trim(preg_replace('/\s+/', '', $telefono));
 
 // 🔥 INSERT INSCRIPCIÓN
 $sql = "INSERT INTO inscritos
@@ -117,11 +121,12 @@ $stmt->bind_param(
 );
 
 // 🔥 EJECUTAR
-if($stmt->execute()){
+try {
+
+    $stmt->execute();
 
     $id_inscrito = $conn->insert_id;
 
-    // 🆓 GRATIS → LIBRE
     if($monto == 0){
 
         $upd = $conn->prepare("
@@ -137,12 +142,23 @@ if($stmt->execute()){
         exit;
     }
 
-    // 💳 CON PAGO → CHECKOUT
     header("Location: checkout.php?id=".$id_inscrito);
     exit;
 
-}else{
+} catch (mysqli_sql_exception $e) {
 
-    die("ERROR SQL: " . $stmt->error);
+    // 🔥 DUPLICADO (UNIQUE KEY)
+    if($e->getCode() == 1062){
+
+        $_SESSION['error'] = "⚠️ Ya tienes una inscripción activa con este DNI o celular.";
+        header("Location: inscripcion.php?evento_id=".$evento_id);
+        exit;
+    }
+
+    // 🔥 OTROS ERRORES
+    error_log($e->getMessage());
+
+    $_SESSION['error'] = "Ocurrió un error inesperado. Intenta nuevamente.";
+    header("Location: inscripcion.php?evento_id=".$evento_id);
+    exit;
 }
-?>
