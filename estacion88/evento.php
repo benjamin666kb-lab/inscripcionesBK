@@ -372,7 +372,7 @@ body{
 
     <p>📅 <?php echo $ev['fecha_evento']; ?></p>
 
-    <a href="inscripcion.php?evento_id=<?php echo $ev['id']; ?>">
+    <a href="inscripcion?evento_id=<?php echo $ev['id']; ?>">
         <button class="btn-inscribirme">🚀 INSCRIBIRME AHORA</button>
     </a>
 
@@ -433,7 +433,7 @@ echo !empty($ev['info_importante'])
 
 </div>
 <div class="content" style="text-align: center;">
-<a href="inscripcion.php?evento_id=<?php echo $ev['id']; ?>">
+<a href="inscripcion?evento_id=<?php echo $ev['id']; ?>">
         <button class="btn-inscribirme">🚀 INSCRIBIRME AHORA</button>
     </a>
 </div>

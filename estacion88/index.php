@@ -452,9 +452,14 @@ body{
 .logo88{
     font-size:1.8rem;
     font-weight:800;
-    color:white;
+    color:white;    
 }
-
+.logo88 a{
+    font-size:1.8rem;
+    font-weight:800;
+    color:white;
+    text-decoration:none;    
+}
 .logo88 span{
     color:#e31b23;
 }
@@ -525,7 +530,7 @@ body{
 <header class="navbar88">
 
     <div class="logo88">
-        🏃 Estación<span>88</span>
+        <a href="https://www.estacion88.com/">🏃 Estación<span>88</span></a>
     </div>
 
     <nav class="menu88">
@@ -549,7 +554,7 @@ body{
             <p>Ingresa tu DNI para buscar tus tickets registrados</p>
         </div>
 
-        <form action="buscar_ticket.php" method="GET" class="search-form">
+        <form action="buscar_ticket" method="GET" class="search-form">
 
             <div class="search-box">
 
@@ -606,7 +611,7 @@ Inscríbete en línea y recibe tu ticket digital automáticamente.
     <div class="event-card">
 
         <!-- 🔵 CLICK A DETALLE -->
-        <a href="evento.php?id=<?php echo $ev['id']; ?>" style="text-decoration:none;color:inherit;">
+        <a href="evento?id=<?php echo $ev['id']; ?>" style="text-decoration:none;color:inherit;">
 
         <div class="event-img">
 
@@ -643,7 +648,7 @@ Inscríbete en línea y recibe tu ticket digital automáticamente.
         </a>
 
         <!-- 🔴 BOTÓN INSCRIPCIÓN -->
-        <a href="inscripcion.php?evento_id=<?php echo $ev['id']; ?>">
+        <a href="inscripcion.?evento_id=<?php echo $ev['id']; ?>">
             <button class="btn-event">Inscribirme</button>
         </a>
 

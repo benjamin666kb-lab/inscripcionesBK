@@ -3,7 +3,7 @@
 include("../db.php");
 
 if(!isset($_GET['id'])){
-    header("Location: index.php");
+    header("Location: index");
     exit;
 }
 
@@ -45,7 +45,7 @@ if(in_array($inscrito['estado_pago'], $estadosBloqueados)){
         El ticket <b>{$inscrito['codigo']}</b> ya no requiere pago.
         </p>
 
-        <a href='ticket.php?codigo={$inscrito['codigo']}'>
+        <a href='ticket?codigo={$inscrito['codigo']}'>
             Ver Ticket
         </a>
 
@@ -357,7 +357,7 @@ const handleCulqiAction = () => {
     const token = Culqi.token.id;
 
     window.location.href =
-    "procesar_pago.php?id=<?php echo $inscrito['id']; ?>&token=" + token;
+    "procesar_pago?id=<?php echo $inscrito['id']; ?>&token=" + token;
 
 }else {
 
@@ -382,7 +382,7 @@ document
 </script>
 
 </body>
-<a href="index.php" class="btn-volver">
+<a href="index" class="btn-volver">
 ← Inicio
 </a>
 </html>

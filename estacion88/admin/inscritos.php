@@ -219,6 +219,7 @@ switch($_GET['msg']){
 <th>Monto</th>
 <th>Estado</th>
 <th>Fecha</th>
+<th>club</th>
 <th>Acciones</th>
 </tr>
 
@@ -270,7 +271,7 @@ if($estado === "PAGADO"){ ?>
 </td>
 
 <td><?= $row['fecha_registro']; ?></td>
-
+<td><?= $row['club_equipo']; ?></td>
 <td>
 
 <?php if($esLector){ ?>

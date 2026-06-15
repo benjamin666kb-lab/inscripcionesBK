@@ -89,7 +89,7 @@ if(
     $stmt->execute();
 
     header(
-        "Location: confirmacion.php?codigo=".$inscrito['codigo']
+        "Location: confirmacion?codigo=".$inscrito['codigo']
     );
 
     exit;

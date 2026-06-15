@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 session_start();
 include("../db.php");
 include("admin/csrf.php");
@@ -123,7 +121,7 @@ if(!$stmt){
 
 // 🔥 TIPOS (IMPORTANTE)
 $stmt->bind_param(
-    "isssssisssisd",
+    "issssssiisssisd",
     $evento_id,
     $codigo,
     $nombre,
@@ -159,11 +157,11 @@ try {
         $upd->bind_param("i", $id_inscrito);
         $upd->execute();
 
-        header("Location: confirmacion.php?codigo=".$codigo);
+        header("Location: confirmacion?codigo=".$codigo);
         exit;
     }
 
-    header("Location: checkout.php?id=".$id_inscrito);
+    header("Location: checkout?id=".$id_inscrito);
     exit;
 
 } catch (mysqli_sql_exception $e) {
@@ -172,7 +170,7 @@ try {
     if($e->getCode() == 1062){
 
         $_SESSION['error'] = "⚠️ Ya tienes una inscripción activa con este DNI o celular.";
-        header("Location: inscripcion.php?evento_id=".$evento_id);
+        header("Location: inscripcion?evento_id=".$evento_id);
         exit;
     }
 
@@ -180,6 +178,6 @@ try {
     error_log($e->getMessage());
 
     $_SESSION['error'] = "Ocurrió un error inesperado. Intenta nuevamente.";
-    header("Location: inscripcion.php?evento_id=".$evento_id);
+    header("Location: inscripcion?evento_id=".$evento_id);
     exit;
 }

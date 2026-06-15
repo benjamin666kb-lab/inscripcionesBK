@@ -4,7 +4,7 @@ include("../db.php");
 
 if(!isset($_GET['codigo'])){
 
-    header("Location:index.php");
+    header("Location:index");
     exit;
 
 }
@@ -31,7 +31,7 @@ $resultado = $stmt->get_result();
 
 $inscrito = $resultado->fetch_assoc();
 $url_ticket =
-"https://inscripcionesbk.free.nf/estacion88/ticket.php?codigo="
+"https://inscripcionesbk.free.nf/estacion88/ticket?codigo="
 . urlencode($inscrito['codigo']);
 
 $qr_url =
@@ -309,7 +309,7 @@ S/ <?php echo number_format($inscrito['monto'],2); ?>
 </div>
 <div class="text-center mt-4">
 
-<a href="index.php" class="btn btn-success">
+<a href="index" class="btn btn-success">
 
 Volver al Inicio
 

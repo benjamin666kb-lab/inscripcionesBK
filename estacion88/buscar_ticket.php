@@ -346,7 +346,7 @@ else{
 <td>
 
 <a
-href="ticket.php?codigo=<?= urlencode($row['codigo']) ?>"
+href="ticket?codigo=<?= urlencode($row['codigo']) ?>"
 class="btn btn-primary btn-ticket">
 
 Ver Ticket
@@ -367,7 +367,7 @@ Ver Ticket
 
 <?php } ?>
 
-<a href="index.php" class="btn btn-secondary btn-volver mt-3">
+<a href="index" class="btn btn-secondary btn-volver mt-3">
 ⬅ Volver
 </a>
 

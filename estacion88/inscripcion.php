@@ -409,7 +409,7 @@ Llena tus datos correctamente para participar oficialmente en el evento.
 
 </div>
 
-<form action="guardar_inscripcion.php" method="POST">
+<form action="guardar_inscripcion" method="POST">
 <input
     type="hidden"
     name="csrf_token"
@@ -598,7 +598,7 @@ function verificarInscripcion(){
             return;
         }
 
-        fetch("verificar_dni_celular.php", {
+        fetch("verificar_dni_celular", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
@@ -628,7 +628,7 @@ if(partes[0] === "EXISTE"){
     btnTicket.style.display = "block";
 
     btnTicket.href =
-        "ticket.php?codigo=" + codigo;
+        "ticket?codigo=" + codigo;
 
 
             }else{

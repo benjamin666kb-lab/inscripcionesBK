@@ -33,7 +33,7 @@ if($resultado->num_rows == 0){
 $inscrito = $resultado->fetch_assoc();
 
 $url_ticket =
-"https://inscripcionesbk.free.nf/estacion88/ticket.php?codigo="
+"https://inscripcionesbk.free.nf/estacion88/ticket?codigo="
 . urlencode($inscrito['codigo']);
 
 $qr_url =
@@ -253,7 +253,7 @@ if($mostrarPago){
 ?>
 
 <a
-href="checkout.php?id=<?php echo $inscrito['id']; ?>"
+href="checkout?id=<?php echo $inscrito['id']; ?>"
 class="btn btn-warning">
 
 💳 Continuar Pago
@@ -269,7 +269,7 @@ class="btn btn-primary">
 
 <button type="button"
         class="btn btn-secondary"
-        onclick="if(document.referrer){history.back();}else{window.location='index.php';}">
+        onclick="if(document.referrer){history.back();}else{window.location='index';}">
     ⬅ Volver
 </button>
 

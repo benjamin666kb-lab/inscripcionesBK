@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("session_check.php");
+include("sesion_check.php");
 include("csrf.php");
 include("../../db.php");
 
