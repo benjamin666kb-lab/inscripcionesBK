@@ -30,6 +30,13 @@ $stmt->execute();
 $resultado = $stmt->get_result();
 
 $inscrito = $resultado->fetch_assoc();
+$url_ticket =
+"https://inscripcionesbk.free.nf/estacion88/ticket.php?codigo="
+. urlencode($inscrito['codigo']);
+
+$qr_url =
+"https://api.qrserver.com/v1/create-qr-code/?size=250x250&data="
+. urlencode($url_ticket);
 
 if(!$inscrito){
 
@@ -283,6 +290,21 @@ S/ <?php echo number_format($inscrito['monto'],2); ?>
 <?php echo $inscrito['codigo']; ?>
 
 </div>
+
+</div>
+<div class="text-center mt-4">
+
+    <h5>📱 Tu Código QR</h5>
+
+    <img
+        src="<?php echo $qr_url; ?>"
+        alt="QR Ticket"
+        width="220"
+        style="border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,.15);">
+
+    <p class="text-muted mt-2">
+        Escanea para ver tu ticket
+    </p>
 
 </div>
 <div class="text-center mt-4">

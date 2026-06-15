@@ -1,4 +1,5 @@
 <?php
+include("admin/csrf.php");
 require_once("../db.php");
 
 $evento_id = isset($_GET['evento_id']) ? intval($_GET['evento_id']) : 0;
@@ -52,61 +53,143 @@ $kits = $stmt2->get_result();
 
 <style>
 
+:root{
+    --rojo:#e31b23;
+    --rojo-hover:#ff3038;
+    --negro:#000000;
+    --gris:#f5f5f5;
+    --texto:#222;
+}
+
+/* =========================
+   GENERAL
+========================= */
+
 *{
     font-family:'Poppins',sans-serif;
+    box-sizing:border-box;
 }
 
 body{
-    background: linear-gradient(135deg,#00c853,#43a047,#1b5e20);
+    background:
+    linear-gradient(
+        180deg,
+        #181818 0%,
+        #111111 100%
+    );
+
     min-height:100vh;
     padding:50px 0;
 }
 
+/* =========================
+   TARJETA PRINCIPAL
+========================= */
+
 .card-evento{
-    background:#fff;
-    border-radius:30px;
+
+    background:white;
+
+    border-radius:24px;
+
     overflow:hidden;
-    box-shadow:0 20px 60px rgba(0,0,0,.25);
+
+    box-shadow:
+    0 15px 50px rgba(0,0,0,.35);
 }
 
+/* =========================
+   CABECERA
+========================= */
+
 .header-evento{
-    background: linear-gradient(135deg,#ff9800,#ff5722);
+
+    background:
+    linear-gradient(
+        135deg,
+        #e31b23,
+        #c1121f
+    );
+
     color:white;
-    padding:40px;
+
+    padding:45px 35px;
+
     text-align:center;
 }
 
 .header-evento h1{
-    font-size:3rem;
+
+    font-size:clamp(2rem,5vw,3.5rem);
+
     font-weight:900;
+
     margin-bottom:10px;
 }
 
 .header-evento p{
-    font-size:1.1rem;
+
+    font-size:1rem;
+
+    opacity:.95;
+
     margin-bottom:0;
 }
+
+/* =========================
+   FORMULARIO
+========================= */
 
 .formulario{
     padding:40px;
 }
 
+/* =========================
+   LABELS
+========================= */
+
 .form-label{
-    font-weight:600;
+    font-weight:700;
+    color:#222;
 }
+
+/* =========================
+   INPUTS
+========================= */
 
 .form-control,
 .form-select{
-    border-radius:15px;
-    padding:12px;
+
+    border:2px solid #e5e5e5;
+
+    border-radius:12px;
+
+    padding:13px 15px;
+
+    transition:.3s;
 }
 
+.form-control:focus,
+.form-select:focus{
+
+    border-color:var(--rojo);
+
+    box-shadow:
+    0 0 0 .15rem rgba(227,27,35,.15);
+
+}
+
+/* =========================
+   BOTON
+========================= */
+
 .btn-inscribirse{
-    background: linear-gradient(135deg,#00c853,#43a047);
+
+    background:var(--rojo);
     border:none;
     width:100%;
-    padding:15px;
-    font-size:1.2rem;
+    padding:16px;
+    font-size:1.1rem;
     font-weight:700;
     border-radius:50px;
     transition:.3s;
@@ -114,46 +197,168 @@ body{
 }
 
 .btn-inscribirse:hover{
-    transform:translateY(-3px);
+
+    background:var(--rojo-hover);
+    transform:translateY(-2px);
+    box-shadow:
+    0 10px 25px rgba(227,27,35,.30);
 }
+
+/* =========================
+   BADGE
+========================= */
 
 .badge-evento{
-    background:#fff3cd;
-    padding:12px;
-    border-radius:15px;
-    font-weight:600;
-    color:#856404;
-    display:inline-block;
-    margin-top:10px;
+
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:#fff;
+    color:#e31b23;
+    padding:12px 22px;
+    border-radius:50px;
+    font-size:14px;
+    font-weight:700;
+    border:2px solid rgba(227,27,35,.15);
+    box-shadow:
+    0 4px 15px rgba(0,0,0,.08);
+    margin-top:15px;
+    transition:.3s;
 }
 
-.info-box{
-    background:#f8f9fa;
-    padding:20px;
-    border-radius:20px;
-    margin-bottom:25px;
+.badge-evento:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+    0 8px 20px rgba(227,27,35,.15);
 }
+
+/* =========================
+   CAJAS INFO
+========================= */
+
+.info-box{
+
+    background:#ffffff;
+
+    border-left:6px solid var(--rojo);
+
+    padding:20px;
+
+    border-radius:14px;
+
+    margin-bottom:25px;
+
+    box-shadow:
+    0 5px 15px rgba(0, 0, 0, 0.25);
+}
+
+/* =========================
+   BOTON VOLVER
+========================= */
+
 .btn-volver{
+
     position:fixed;
+
     top:20px;
     left:20px;
-    background:rgba(255,255,255,0.15);
+
+    background:
+    rgba(0,0,0,.65);
+
     color:white;
-    padding:8px 14px;
-    border-radius:30px;
+
+    padding:10px 16px;
+
+    border-radius:50px;
+
     text-decoration:none;
+
     font-size:13px;
-    font-weight:600;
-    backdrop-filter: blur(10px);
-    border:1px solid rgba(255,255,255,0.2);
+
+    font-weight:700;
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(8px);
+
     transition:.3s;
+
     z-index:999;
 }
 
 .btn-volver:hover{
-    transform:translateY(-2px);
-    background:rgba(255,255,255,0.25);
+
+    background:var(--rojo);
+
     color:white;
+
+    transform:translateY(-2px);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+    body{
+        padding:20px 10px;
+    }
+
+    .header-evento{
+        padding:35px 20px;
+    }
+
+    .formulario{
+        padding:25px 20px;
+    }
+
+    .header-evento h1{
+        font-size:2rem;
+    }
+    }
+.consent-box{
+
+    background:#fff8e1;
+
+    border:1px solid #ffe082;
+
+    border-left:5px solid #f59e0b;
+
+    border-radius:14px;
+
+    padding:15px;
+
+    margin-top:15px;
+}
+
+.consent-title{
+
+    font-size:14px;
+
+    font-weight:700;
+
+    color:#92400e;
+
+    margin-bottom:10px;
+}
+
+.consentimiento-texto{
+
+    font-size:13px;
+
+    line-height:1.5;
+
+    color:#4b5563;
+}
+
+.form-check-input{
+
+    margin-top:4px;
 }
 </style>
 
@@ -171,7 +376,7 @@ body{
 
 <div class="header-evento">
 
-<a href="index.php" style="text-decoration:none; color:inherit;">
+<a href="https://www.estacion88.com/" style="text-decoration:none; color:inherit;">
   <h1>🏃 ESTACION88.COM</h1>
 </a>
 <p>
@@ -205,7 +410,10 @@ Llena tus datos correctamente para participar oficialmente en el evento.
 </div>
 
 <form action="guardar_inscripcion.php" method="POST">
-
+<input
+    type="hidden"
+    name="csrf_token"
+    value="<?= $_SESSION['csrf_token']; ?>">
 <input type="hidden" name="evento_id" value="<?php echo $evento['id']; ?>">
 
 <div class="row">
@@ -227,9 +435,33 @@ Llena tus datos correctamente para participar oficialmente en el evento.
 <!--MENSAJED DE ALERTA!!--><!--MENSAJED DE ALERTA!!--><!--MENSAJED DE ALERTA!!-->
 <div id="mensaje-alerta" style="color:red;font-weight:600;margin-bottom:10px;"></div>
 
+<div class="col-12">
+
+<a
+id="btn-ticket"
+href="#"
+class="btn btn-primary mt-3 w-100"
+style="display:none; border-radius:50px; padding:15px; font-weight:700;">
+🎫 VER MI TICKET
+</a>
+</div>
+
 <div class="col-md-6 mb-3">
 <label class="form-label">Correo Electrónico</label>
 <input type="email" name="correo" class="form-control" required>
+</div>
+<!-- 🔥 GRUPO_CLUB -->
+<div class="mb-3">
+    <label class="form-label">
+        🏃 Nombre del Club - Team - Grupo - Colectivo (si pertenece)
+    </label>
+
+    <input
+        type="text"
+        name="club_equipo"
+        class="form-control"
+        maxlength="255"
+        placeholder="Ejemplo: Team Estacion88 Running">
 </div>
 
 <!-- 🔥 KITS DINÁMICOS -->
@@ -237,13 +469,14 @@ Llena tus datos correctamente para participar oficialmente en el evento.
 
 <label class="form-label">Tipo de Inscripción (Kit)</label>
 
-<select name="kit_id" class="form-select" required>
+<select id="kit_id" name="kit_id" class="form-select" required>
 
 <option value="">Seleccione un kit</option>
 
 <?php while($k = $kits->fetch_assoc()){ ?>
 
-<option value="<?php echo $k['id']; ?>">
+<option value="<?php echo $k['id']; ?>"
+data-precio="<?php echo $k['precio']; ?>">
 <?php echo $k['nombre_kit']; ?> (S/ <?php echo $k['precio']; ?>)
 </option>
 
@@ -252,12 +485,24 @@ Llena tus datos correctamente para participar oficialmente en el evento.
 </select>
 
 </div>
+<!-- 🔥 CATEGORIAS -->
+<div class="col-md-4 mb-3">
+<label class="form-label">Categoría</label>
+<select name="categoria" class="form-select" required>
+<option value="">Seleccione</option>
+<option value="adolescente">Adolescentes (14 +) TEEN</option>
+<option value="joven">Joven (18 +)</option>
+<option value="master">Master (40 +)</option>
+<option value="super_master">Super Master (50 +)</option>
+</select>
+</div>
 
+<!-- 🔥 EDAD -->
 <div class="col-md-4 mb-3">
 <label class="form-label">Edad</label>
 <input type="number" name="edad" min="1" max="100" class="form-control" required>
 </div>
-
+<!-- 🔥 DISTANCIA  -->
 <div class="col-md-4 mb-3">
 <label class="form-label">Distancia</label>
 <select name="distancia" class="form-select" required>
@@ -268,10 +513,10 @@ Llena tus datos correctamente para participar oficialmente en el evento.
 <option value="20K">🔥🏃 20K</option>
 </select>
 </div>
-
+<!-- 🔥 TALLA -->
 <div class="col-md-4 mb-3">
 <label class="form-label">Talla Polo</label>
-<select name="talla" class="form-select" required>
+<select id="talla" name="talla" class="form-select" required>
 <option value="">Seleccione</option>
 <option>S</option>
 <option>M</option>
@@ -281,23 +526,51 @@ Llena tus datos correctamente para participar oficialmente en el evento.
 </div>
 
 </div>
+<!-- 🔥 CONSENTIMIENTO -->
+<div class="consent-box">
 
+    <div class="consent-title">
+        ⚠️ Declaración de Responsabilidad
+    </div>
+
+    <div class="form-check">
+
+        <input
+            class="form-check-input"
+            type="checkbox"
+            name="acepta_responsabilidad"
+            value="1"
+            id="acepta_responsabilidad"
+            required>
+
+        <label class="form-check-label consentimiento-texto"
+               for="acepta_responsabilidad">
+
+            Al participar en este evento, el o la participante declara
+            encontrarse en buen estado de salud y asumir bajo su propia
+            responsabilidad los riesgos inherentes a la participación,
+            liberando de responsabilidad al organizador ante cualquier
+            incidente no atribuible a su gestión.
+
+        </label>
+
+    </div>
+
+</div>
+<br>
 <div class="col-12">
 
 <button type="submit" class="btn-inscribirse" id="btn-submit">
 🚀 CONTINUAR INSCRIPCIÓN
 </button>
-<a
-id="btn-ticket"
-href="#"
-class="btn btn-primary mt-3 w-100"
-style="display:none; border-radius:50px; padding:15px; font-weight:700;">
-🎫 VER MI TICKET
-</a>
 </div>
 
 </form>
 
+<div class="info-box">
+<strong>Información del evento</strong><br>
+Tu inscripción será validada automáticamente y recibirás un ticket digital con código QR.
+</div>
 </div>
 
 </div>
@@ -374,6 +647,46 @@ window.addEventListener("DOMContentLoaded", function(){
 
     document.querySelector('input[name="dni"]').addEventListener("input", verificarInscripcion);
     document.querySelector('input[name="telefono"]').addEventListener("input", verificarInscripcion);
+
+});
+
+</script>
+<script>
+
+function validarKitGratis(){
+
+    const kit = document.getElementById("kit_id");
+    const talla = document.getElementById("talla");
+
+    const opcionSeleccionada =
+        kit.options[kit.selectedIndex];
+
+    const precio =
+        parseFloat(
+            opcionSeleccionada.dataset.precio || 0
+        );
+
+    if(precio === 0){
+
+        talla.value = "";
+        talla.disabled = true;
+        talla.required = false;
+
+    }else{
+
+        talla.disabled = false;
+        talla.required = true;
+
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    document
+        .getElementById("kit_id")
+        .addEventListener("change", validarKitGratis);
+
+    validarKitGratis();
 
 });
 

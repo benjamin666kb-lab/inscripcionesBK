@@ -59,7 +59,6 @@ elseif($estadoMostrar=="LIBRE"){
     $colorEstado = "#0d6efd";
 }
 
-
 ?>
 
 <!DOCTYPE html>
@@ -75,45 +74,45 @@ elseif($estadoMostrar=="LIBRE"){
 
 <style>
 
-body{
+    body{
     background:#f4f6f9;
-}
+    }
 
-.card-ticket{
+    .card-ticket{
     max-width:950px;
     margin:40px auto;
     border:none;
     border-radius:25px;
     overflow:hidden;
     box-shadow:0 10px 30px rgba(0,0,0,.08);
-}
+    }
 
-.header-ticket{
+    .header-ticket{
     background:linear-gradient(135deg,#0d6efd,#0a58ca);
     color:white;
     padding:30px;
-}
+    }
 
-.info{
+    .info{
     padding:30px;
-}
+    }
 
-.item{
+    .item{
     margin-bottom:18px;
-}
+    }
 
-.label{
+    .label{
     color:#777;
     font-size:13px;
     text-transform:uppercase;
-}
+    }
 
-.valor{
+    .valor{
     font-size:18px;
     font-weight:600;
-}
+    }
 
-@media print{
+    @media print{
 
     .acciones{
         display:none;
@@ -127,7 +126,7 @@ body{
         box-shadow:none;
     }
 
-}
+    }   
 
 </style>
 
@@ -294,4 +293,25 @@ class="btn btn-primary">
 </div>
 
 </body>
+<hr>
+
+<footer class="text-center mt-3">
+    
+    <small class="text-muted">
+        <strong>Información importante:</strong><br>
+        Si necesita corregir o actualizar datos de su inscripción
+        (nombre, DNI, teléfono, talla u otros), comuníquese con soporte.
+        <br>
+        
+        📞 Soporte: <strong>Juan Pérez</strong>
+        |
+        
+        <a href="https://wa.me/51999999999"
+           target="_blank"
+           style="text-decoration:none;">
+            +51 999 999 999
+        </a>
+    </small>
+
+</footer>
 </html>

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include("sesion_check.php");
+include("csrf.php");
 include("../../db.php");
 
 if(!isset($_SESSION['id_admin'])){
@@ -27,11 +28,36 @@ $result = $conn->query($sql);
 
 <style>
 
-body{
-    background: linear-gradient(135deg,#0f172a,#1f2937);
-    font-family: Arial;
-    color: white;
+:root{
+    --rojo:#e31b23;
+    --rojo-hover:#ff3038;
+
+    --negro:#000;
+    --gris-oscuro:#111;
+    --gris-card:#161616;
+
+    --texto:#fff;
+    --texto-soft:#cfcfcf;
 }
+
+/* =========================
+   BODY (ESTACIÓN88 BASE REAL)
+========================= */
+
+body{
+    background: linear-gradient(
+        180deg,
+        #571f1f 0%,
+        #0f0f0f 100%
+    );
+
+    color: var(--texto);
+    font-family:'Poppins',sans-serif;
+}
+
+/* =========================
+   CONTAINER
+========================= */
 
 /* HEADER */
 h2{
@@ -175,11 +201,30 @@ h2{
         ✏ Editar
     </a>
 
-    <a href="eliminar_evento.php?id=<?php echo $ev['id']; ?>" 
-       class="btn-eliminar"
-       onclick="return confirm('¿Seguro que deseas eliminar este evento?');">
-       🗑 Eliminar
-    </a>
+    <form method="POST"
+      action="eliminar_evento.php"
+      style="display:inline;">
+
+    <input
+        type="hidden"
+        name="id"
+        value="<?php echo $ev['id']; ?>">
+
+    <input
+        type="hidden"
+        name="csrf_token"
+        value="<?php echo $_SESSION['csrf_token']; ?>">
+
+    <button
+        type="submit"
+        class="btn-eliminar"
+        onclick="return confirm('¿Seguro que deseas eliminar este evento?');">
+
+        🗑 Eliminar
+
+    </button>
+
+</form>
 </div>
 
 </div>

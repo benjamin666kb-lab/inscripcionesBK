@@ -2,27 +2,84 @@
 
 session_start();
 include("sesion_check.php");
-if(!isset($_SESSION['id_admin'])){
+include("../../db.php");
+
+/* =========================
+   VALIDACIÓN DE SESIÓN
+========================= */
+if (!isset($_SESSION['id_admin']) || !isset($_SESSION['rol'])) {
     header("Location: login.php");
     exit;
 }
 
-include("../../db.php");
+$rol = strtoupper($_SESSION['rol']);
 
-if(!isset($_GET['id'])){
+if (!in_array($rol, ['ADMIN', 'OPERADOR'])) {
+    die("Acceso denegado");
+}
+
+/* =========================
+   CSRF TOKEN
+========================= */
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+/* =========================
+   VALIDAR ID
+========================= */
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die("ID no válido");
 }
 
 $id = intval($_GET['id']);
 
-// Cambiar estado a PAGADO
-$sql = "UPDATE inscritos SET estado_pago='PAGADO' WHERE id=?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id);
+/* =========================
+   VALIDAR CSRF
+========================= */
+if (!isset($_GET['csrf_token']) || $_GET['csrf_token'] !== $_SESSION['csrf_token']) {
+    die("Solicitud no válida (CSRF detectado)");
+}
 
-if($stmt->execute()){
-    header("Location: detalle_inscrito.php?id=".$id."&msg=ok");
+/* =========================
+   CONSULTAR ESTADO ACTUAL
+========================= */
+$stmt = $conn->prepare("SELECT estado_pago FROM inscritos WHERE id = ?");
+if (!$stmt) {
+    die("Error en consulta");
+}
+
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$fila = $result->fetch_assoc();
+
+if (!$fila) {
+    die("Inscrito no encontrado");
+}
+
+/* =========================
+   VALIDAR SI YA ESTÁ PAGADO
+========================= */
+if (strtoupper($fila['estado_pago']) === 'PAGADO') {
+    header("Location: detalle_inscrito.php?id=$id&msg=ya_confirmado");
     exit;
-}else{
-    echo "Error al actualizar pago";
+}
+
+/* =========================
+   ACTUALIZAR PAGO
+========================= */
+$update = $conn->prepare("UPDATE inscritos SET estado_pago = 'PAGADO' WHERE id = ?");
+if (!$update) {
+    die("Error en actualización");
+}
+
+$update->bind_param("i", $id);
+
+if ($update->execute()) {
+    header("Location: detalle_inscrito.php?id=$id&msg=ok");
+    exit;
+} else {
+    header("Location: detalle_inscrito.php?id=$id&msg=error");
+    exit;
 }

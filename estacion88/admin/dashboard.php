@@ -56,12 +56,35 @@ background:#f4f6f9;
 }
 
 .topbar{
-background:#198754;
-color:white;
-padding:15px 30px;
-display:flex;
-justify-content:space-between;
-align-items:center;
+    background:
+    linear-gradient(
+        90deg,
+        #000000 0%,        
+        #e31b23 50%,        
+        #198754 100%
+    );
+
+    color:white;
+
+    padding:22px 35px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    border-bottom:3px solid rgba(255,255,255,.1);
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,.35);
+}
+.topbar h1,
+.topbar h2,
+.topbar h3{
+    margin:0;
+    font-size:2rem;
+    font-weight:900;
+    letter-spacing:1px;
+    color:#fff;
 }
 
 .card-box{
@@ -107,7 +130,7 @@ font-weight:900;
     padding: 14px 28px;
     border-radius: 16px;
 
-    background: linear-gradient(135deg,#7b2ff7,#f107a3);
+    background: linear-gradient(135deg,#000000,#e31b23);
     color: #fff;
     text-decoration: none;
     font-weight: 700;

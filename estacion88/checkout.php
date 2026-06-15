@@ -78,9 +78,9 @@ if(in_array($inscrito['estado_pago'], $estadosBloqueados)){
     background:
     linear-gradient(
     135deg,
-    #00c853,
-    #43a047,
-    #1b5e20
+    #05130b,
+    #010801,
+    #2e0303
     );
 
     min-height:100vh;

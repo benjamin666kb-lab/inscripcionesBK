@@ -6,7 +6,7 @@ if(!isset($_SESSION['id_admin'])){
     header("Location: login.php");
     exit;
 }
-
+include("csrf.php");
 include("../../db.php");
 
 // 🔐 ROLES NORMALIZADOS
@@ -45,61 +45,143 @@ $resultado = $conn->query($sql);
 
 <style>
 
-*{
+    *{
     font-family:'Poppins',sans-serif;
-}
+    }
 
-body{
+    body{
     background:#f5f6fa;
-}
+    }
+    .topbar{
+    background:
+    linear-gradient(
+        90deg,
+        #000000 0%,        
+        #e31b23 50%,        
+        #198754 100%
+    );
 
-.container-fluid{
+    color:white;
+
+    padding:22px 35px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    border-bottom:3px solid rgba(255,255,255,.1);
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,.35);
+    }
+    .topbar h1,
+    .topbar h2,
+    .topbar h3{
+    margin:0;
+    font-size:2rem;
+    font-weight:900;
+    letter-spacing:1px;
+    color:#fff;
+    }
+    .container-fluid{
     max-width: 1200px;
-}
+    }
 
-.card{
+    .card{
     border:none;
     border-radius:15px;
     box-shadow:0 8px 20px rgba(0,0,0,.08);
-}
+    }
 
-.titulo{
+    .titulo{
     font-weight:800;
     font-size:25px;
-}
+    }
 
-table{
+    table{
     font-size:14px;
-}
+    }
 
-.table td,
-.table th{
+    .table td,
+    .table th{
     padding:4px 6px !important;
     vertical-align: middle;
-}
+    }
 
-.badge{
+    .badge{
     font-size:11px;
     padding:4px 6px;
-}
+    }
 
-.btn-sm{
+    .btn-sm{
     font-size:11px;
     padding:3px 8px;
-}
+    }
 
-.card-body{
+    .card-body{
     padding:10px;
-}
+    }
+    .fade-msg{
+    animation: fadeOut 4s forwards;
+    }
+
+    .fade-msg{
+    animation: fadeOut 4s forwards;
+    }
+
+    @keyframes fadeOut{
+    0%{opacity:1;}
+    80%{opacity:1;}
+    100%{opacity:0; display:none;}
+    }
 
 </style>
 
 </head>
 
 <body>
+<div class="topbar">
 
+<div>
+🏃 Estación88 Admin
+</div>
+
+<div>
+<?php echo $_SESSION['nombre']; ?> |
+<?php echo $_SESSION['rol']; ?> |
+
+<a href="logout.php" class="btn btn-light btn-sm">
+Salir
+</a>
+
+</div>
+
+</div>
 <div class="container-fluid mt-4">
+<?php if(isset($_GET['msg'])){ ?>
 
+<div class="alert alert-success text-center fade-msg">
+
+<?php
+switch($_GET['msg']){
+
+    case 'eliminado':
+        echo "🗑 Inscrito eliminado correctamente";
+        break;
+
+    case 'editado':
+        echo "✏ Inscrito actualizado correctamente";
+        break;
+
+    case 'creado':
+        echo "✅ Inscrito registrado correctamente";
+        break;
+}
+?>
+
+</div>
+
+<?php } ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
 
     <h2 class="titulo">
@@ -218,11 +300,29 @@ if($estado === "PAGADO"){ ?>
     <?php if($esAdmin){ ?>
 
         <!-- ELIMINAR -->
-        <a href="eliminar_inscrito.php?id=<?= $row['id'] ?>"
+        <form method="POST" 
+      action="eliminar_inscrito.php"
+      style="display:inline;">
+
+    <input
+        type="hidden"
+        name="id"
+        value="<?php echo $row['id']; ?>">  
+
+    <input
+        type="hidden"
+        name="csrf_token"
+        value="<?php echo $_SESSION['csrf_token']; ?>">
+
+    <button
+        type="submit"
         class="btn btn-danger btn-sm mb-1"
-        onclick="return confirm('¿Deseas eliminar este inscrito?')">
-            Eliminar
-        </a>
+        onclick="return confirm('¿Seguro que deseas eliminar este inscrito?');">
+        Eliminar
+
+    </button>
+
+</form>
 
     <?php } ?>
 

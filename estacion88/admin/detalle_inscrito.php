@@ -275,8 +275,7 @@ S/ <?php echo number_format($inscrito['monto'],2); ?>
 <div class="d-flex gap-2">
 <?php if($_SESSION['rol'] == 'ADMIN'){ ?>
 
-<a
-href="confirmar_pago.php?id=<?php echo $inscrito['id']; ?>"
+<a href="confirmar_pago.php?id=<?php echo $inscrito['id']; ?>&csrf_token=<?php echo $_SESSION['csrf_token']; ?>"
 class="btn btn-success">
 ✔ Confirmar Pago
 </a>

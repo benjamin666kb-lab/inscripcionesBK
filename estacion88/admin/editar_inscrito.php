@@ -2,6 +2,7 @@
 
 session_start();
 include("sesion_check.php");
+include("csrf.php");
 if(!isset($_SESSION['id_admin'])){
     header("Location: login.php");
     exit;
@@ -24,10 +25,12 @@ $inscrito = $resultado->fetch_assoc();
 
 if($_SERVER["REQUEST_METHOD"]=="POST"){
 
-    $nombre = $_POST['nombre'];
-    $telefono = $_POST['telefono'];
-    $correo = $_POST['correo'];
-    $edad = $_POST['edad'];
+    validar_csrf($_POST['csrf_token']);
+
+    $nombre = trim($_POST['nombre']);
+    $telefono = trim($_POST['telefono']);
+    $correo = trim($_POST['correo']);
+    $edad = (int)$_POST['edad'];
 
     $sql = "UPDATE inscritos SET nombre=?, telefono=?, correo=?, edad=? WHERE id=?";
     $stmt = $conn->prepare($sql);
@@ -57,6 +60,10 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 <h3>✏️ Editar Inscrito</h3>
 
 <form method="POST" class="card p-3">
+    <input
+        type="hidden"
+        name="csrf_token"
+        value="<?= $_SESSION['csrf_token'] ?>">
 
 <input class="form-control mb-2" name="nombre" value="<?= $inscrito['nombre'] ?>" placeholder="Nombre">
 

@@ -28,104 +28,326 @@ if(!$ev){
 
 <style>
 
+:root{
+    --bg-main:#000000;
+    --bg-section:#0d0505;
+    --bg-card:#e0e0b6cc;
+
+    --primary:#e31b23;
+    --primary-hover:#ff3038;
+
+    --text:#ffffff;
+    --text-soft:#cfcfcf;
+
+    --border:rgba(255,255,255,.08);
+}
+
+/* =========================
+   GENERAL
+========================= */
 body{
     margin:0;
-    background:#0f172a;
-    color:white;
-    font-family:Arial;
-}
-.hero{
-    min-height:70vh;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    position: relative;
-    padding:40px;
-    color: #fff;
+    background:var(--bg-main);
+    color:var(--text);
+    font-family:'Segoe UI',sans-serif;
+    overflow-x:hidden;
 }
 
-.hero h1{
-    font-size:3rem;
-    font-weight:900;
-}
-
-.hero p{
-    font-size:1.1rem;
-    opacity:.9;
-    max-width:900px;
-}
-
-/* BOTÓN */
-.btn-inscribirme{
-    margin-top:20px;
-    background:#ffeb3b;
-    color:#000;
-    border:none;
-    padding:15px 40px;
-    font-size:1.1rem;
-    font-weight:bold;
-    border-radius:50px;
-    transition:.3s;
-}
-
-.btn-inscribirme:hover{
-    transform:scale(1.05);
-}
-
-/* CONTENIDO */
-.content{
-    padding:60px 20px;
-    background: linear-gradient(135deg,#14532d,#0f172a);
-}
-
-/* CARDS */
-.card-info{
-    background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.1);
-    border-radius:20px;
-    padding:25px;
-    height:100%;
-}
-
-/* TEXTO INTERNO */
-.content-text{
-    white-space: pre-line;
-    line-height: 1.6;
-    font-size: 15px;
-}
-
-/* BADGE */
-.badge-event{
-    background:#22c55e;
-    padding:10px 15px;
-    border-radius:15px;
-    display:inline-block;
-    margin-bottom:15px;
-}
+/* =========================
+   BOTON VOLVER
+========================= */
 .btn-volver{
     position:fixed;
     top:20px;
     left:20px;
-    background:rgba(255,255,255,0.15);
+
+    background:rgba(0,0,0,.65);
     color:white;
-    padding:8px 14px;
-    border-radius:30px;
+
+    padding:10px 16px;
+
+    border-radius:50px;
+
     text-decoration:none;
+
     font-size:13px;
-    font-weight:600;
-    backdrop-filter: blur(10px);
-    border:1px solid rgba(255,255,255,0.2);
+    font-weight:700;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(8px);
+
     transition:.3s;
+
     z-index:999;
 }
 
 .btn-volver:hover{
-    transform:translateY(-2px);
-    background:rgba(255,255,255,0.25);
+    background:var(--primary);
     color:white;
+    transform:translateY(-2px);
 }
+
+/* =========================
+   HERO
+========================= */
+.hero{
+    min-height:75vh;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    padding:80px 20px;
+
+    position:relative;
+
+    background:
+    linear-gradient(
+        rgba(0,0,0,.75),
+        rgba(0,0,0,.75)
+    );
+}
+
+.hero::before{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background:
+    radial-gradient(
+        circle at center,
+        rgba(227,27,35,.15),
+        transparent 70%
+    );
+
+    pointer-events:none;
+}
+
+.hero h1{
+    font-size:clamp(2.5rem,6vw,5rem);
+    word-wrap:break-word;
+    overflow-wrap:break-word;
+    font-weight:900;
+    margin-bottom:20px;
+    line-height:1.1;
+    z-index:2;
+}
+
+.hero p{
+    max-width:900px;
+    color:var(--text-soft);
+    font-size:1.1rem;
+    line-height:1.8;
+    z-index:2;
+}
+.hero p,
+.content-text{
+    overflow-wrap:break-word;
+    word-break:break-word;
+}
+
+/* =========================
+   BOTON PRINCIPAL
+========================= */
+.btn-inscribirme{
+    margin-top:30px;
+
+    background:var(--primary);
+    color:white;
+
+    border:none;
+
+    padding:16px 40px;
+
+    border-radius:50px;
+
+    font-size:15px;
+    font-weight:700;
+
+    text-decoration:none;
+
+    transition:.3s;
+
+    box-shadow:
+    0 10px 25px rgba(227,27,35,.30);
+
+    z-index:2;
+}
+
+.btn-inscribirme:hover{
+    background:var(--primary-hover);
+
+    color:white;
+
+    transform:translateY(-4px);
+
+    box-shadow:
+    0 15px 35px rgba(227,27,35,.45);
+}
+
+/* =========================
+   CONTENIDO
+========================= */
+.content{
+    padding:80px 20px;
+    background:var(--bg-section);
+}
+
+/* =========================
+   BADGE
+========================= */
+.badge-event{
+    background:var(--primary);
+
+    color:white;
+
+    padding:10px 18px;
+
+    border-radius:50px;
+
+    display:inline-block;
+
+    margin-bottom:20px;
+
+    font-size:13px;
+    font-weight:700;
+
+    letter-spacing:.5px;
+}
+
+/* =========================
+   CARDS
+========================= */
+.card-info{
+    background: rgba(209, 248, 248, 0.61);
+
+    border:1px solid var(--border);
+
+    border-radius:24px;
+    border-top:8px solid #e31b23;
+
+    padding:30px;
+
+    height:100%;
+
+    transition:.3s;
+}
+
+.card-info:hover{
+    transform:translateY(-6px);
+
+    border-color:
+    rgba(240, 16, 24, 0.9);
+
+    box-shadow:
+    0 15px 40px rgba(99, 75, 75, 0.72);
+}
+.card-info:hover h3,
+.card-info:hover h4,
+.card-info:hover h5{
+    transform: skew(2deg) scale(1.03);
+    letter-spacing:1px;
+}
+/* =========================
+   TITULOS DE TARJETA
+========================= */
+.card-info h3,
+.card-info h4,
+.card-info h5{
+    color:#000; /* texto negro */
+
+    font-weight:900;
+
+    /* borde/sombra para contraste */
+    text-shadow:
+        -1px -1px 0 #f7f7f7,
+         1px -1px 0 #e0e0e0,
+        -1px  1px 0 #ffffff,
+         1px  1px 0 #e9e9e9;
+
+    /* sensación de energía/movimiento */
+    letter-spacing:0.5px;
+    transform: skew(-2deg);
+
+    transition:0.3s ease;
+}
+
+/* =========================
+   TEXTO INTERNO
+========================= */
+.content-text{
+    white-space:pre-line;
+    line-height:1.5;
+    font-size:16px;
+
+    color:#000; /* Negro puro */
+
+    font-weight:500;
+
+    letter-spacing:0.3px;
+
+    font-family:"Segoe UI","Arial",sans-serif;
+
+    transform: rotate(-0.2deg);
+
+    /* sombra/borde MUY sutil */
+    text-shadow:
+        0.3px 0.3px 0 rgba(0, 0, 0, 0.75),
+       -0.3px -0.3px 0 rgba(0, 0, 0, 0.75);
+}
+
+/* =========================
+   LINEA DECORATIVA
+========================= */
+.section-divider{
+    width:80px;
+    height:4px;
+
+    background:var(--primary);
+
+    border-radius:20px;
+
+    margin:0 auto 30px auto;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media(max-width:768px){
+
+    .hero{
+        min-height:65vh;
+        padding:70px 20px;
+    }
+
+    .hero h1{
+        font-size:2.3rem;
+    }
+
+    .hero p{
+        font-size:1rem;
+    }
+
+    .card-info{
+        padding:22px;
+    }
+
+    .btn-inscribirme{
+        width:100%;
+        max-width:320px;
+    }
+
+    .btn-volver{
+        top:15px;
+        left:15px;
+    }
+}
+
 </style>
 
 </head>
@@ -146,7 +368,7 @@ body{
 
     <h1><?php echo $ev['nombre']; ?></h1>
 
-    <p><?php echo $ev['descripcion']; ?></p>
+    <p><?php echo nl2br(htmlspecialchars($ev['descripcion'])); ?></p>
 
     <p>📅 <?php echo $ev['fecha_evento']; ?></p>
 
@@ -210,7 +432,11 @@ echo !empty($ev['info_importante'])
 </div>
 
 </div>
-
+<div class="content" style="text-align: center;">
+<a href="inscripcion.php?evento_id=<?php echo $ev['id']; ?>">
+        <button class="btn-inscribirme">🚀 INSCRIBIRME AHORA</button>
+    </a>
+</div>
 </div>
 
 </body>

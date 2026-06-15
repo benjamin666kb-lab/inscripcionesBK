@@ -1,6 +1,8 @@
 <?php
 session_start();
+
 include("sesion_check.php");
+include("csrf.php");
 include("../../db.php");
 
 // 🔐 SOLO ADMIN PUEDE ENTRAR
@@ -9,25 +11,72 @@ if(!isset($_SESSION['id_admin']) || strtoupper($_SESSION['rol']) !== 'ADMIN'){
 }
 
 if(isset($_POST['guardar'])){
+    
+    validar_csrf($_POST['csrf_token']);
 
-    $nombre = $_POST['nombre'];
-    $descripcion = $_POST['descripcion'];
-    $fecha_evento = $_POST['fecha_evento'];
-    $estado = $_POST['estado'];
-    $distancia = $_POST['distancia'];
-
+    $nombre = trim($_POST['nombre']);
+    $descripcion = trim($_POST['descripcion']);
+    $fecha_evento = trim($_POST['fecha_evento']);
+    $estado = trim($_POST['estado']);
+    $distancia = trim($_POST['distancia']);
+    
     // 📌 NUEVOS CAMPOS
-    $detalles_evento = $_POST['detalles_evento'];
-    $info_importante = $_POST['info_importante'];
+    $detalles_evento = trim($_POST['detalles_evento']);
+    $info_importante = trim($_POST['info_importante']);
 
     /* 🔥 IMAGEN */
     $imagen = "";
-    if(!empty($_FILES['imagen']['name'])){
+}
 
-        $ext = pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION);
-        $imagen = time() . "." . $ext;
+if(!empty($_FILES['imagen']['name'])){
 
-        move_uploaded_file($_FILES['imagen']['tmp_name'], "../../uploads/" . $imagen);
+    // Extensiones permitidas
+    $permitidas = ['jpg','jpeg','png','webp'];
+
+    $ext = strtolower(
+        pathinfo(
+            $_FILES['imagen']['name'],
+            PATHINFO_EXTENSION
+        )
+    );
+
+    if(!in_array($ext, $permitidas)){
+        die("Solo se permiten imágenes JPG, JPEG, PNG o WEBP.");
+    }
+
+    // Validar MIME real
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+
+    $mime = finfo_file(
+        $finfo,
+        $_FILES['imagen']['tmp_name']
+    );
+
+    finfo_close($finfo);
+
+    $mimePermitidos = [
+        'image/jpeg',
+        'image/png',
+        'image/webp'
+    ];
+
+    if(!in_array($mime, $mimePermitidos)){
+        die("Archivo inválido.");
+    }
+
+    // Máximo 5 MB
+    if($_FILES['imagen']['size'] > 5 * 1024 * 1024){
+        die("La imagen supera los 5 MB.");
+    }
+
+    // Nombre aleatorio
+    $imagen = uniqid('evento_', true) . "." . $ext;
+
+    if(!move_uploaded_file(
+    $_FILES['imagen']['tmp_name'],
+    "../../uploads/" . $imagen
+    )){
+    die("Error al subir la imagen.");
     }
 
     /* 🔥 INSERT EVENTO */
@@ -70,7 +119,7 @@ if(isset($_POST['guardar'])){
                 if(trim($kits_nombre[$i]) == '') continue;
 
                 $nombre_kit = $kits_nombre[$i];
-                $precio = $kits_precio[$i];
+                $precio = floatval($kits_precio[$i]);
 
                 $stmtKit->bind_param(
                     "isd",
@@ -103,100 +152,159 @@ if(isset($_POST['guardar'])){
 
 <style>
 
-body{
+    body{
     background: #f4f6f9;
     font-family: Arial;
-}
+    }
 
-.card{
+    .card{
     background: white;
     border-radius: 20px;
     padding: 30px;
     margin-top: 40px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
+    }
 
-h2{
+    h2{
     font-weight: 800;
     color:#1f2937;
-}
+    }
 
-label{
+    label{
     font-weight: 600;
     color:#111827;
     margin-bottom:5px;
-}
+    }
 
-.form-control, .form-select{
+    .form-control, .form-select{
     border-radius: 12px;
     padding: 10px;
     font-size: 14px;
     color:#111;
-}
+    }
 
-.form-control:focus{
+    .form-control:focus{
     border-color:#22c55e;
     box-shadow:0 0 0 0.2rem rgba(34,197,94,0.15);
-}
+    }
 
-.kit-box{
+    .kit-box{
     background:#f8fafc;
     padding:15px;
     border-radius:15px;
     margin-bottom:10px;
     border:1px solid #e5e7eb;
-}
+    }
 
-.btn-success{
+    .btn-success{
     padding:12px;
     font-weight:700;
     border-radius:12px;
-}
+    }
 
-.btn-warning{
+    .btn-warning{
     font-weight:600;
     border-radius:12px;
-}
+    }
 
-hr{
+    hr{
     margin:25px 0;
-}
-.top-actions{
+    }
+    .top-actions{
     display:flex;
     justify-content:space-between;
     margin-bottom:20px;
     gap:10px;
-}
+    }
 
-.btn-back, .btn-logout{
+    .btn-back,
+.btn-logout{
+
     flex:1;
     text-align:center;
-    padding:10px;
-    border-radius:50px;
+
+    padding:12px 18px;
+
+    border-radius:14px;
+
     font-weight:700;
-    text-decoration:none;
-    transition:.3s;
     font-size:14px;
+
+    text-decoration:none;
+
+    transition:all .25s ease;
 }
 
+/* =========================
+   VOLVER
+========================= */
 .btn-back{
-    background:#e0f2f1;
-    color:#00695c;
-    border:1px solid #b2dfdb;
+
+    background:linear-gradient(
+        180deg,
+        #ffffff,
+        #f3f4f6
+    );
+
+    color:#1f2937;
+
+    border:1px solid #d1d5db;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.06);
 }
 
 .btn-back:hover{
-    background:#b2dfdb;
+
+    color:#111827;
+    text-decoration:none;
+
+    transform:translateY(-2px);
+
+    background:linear-gradient(
+        180deg,
+        #ffffff,
+        #e5e7eb
+    );
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.10);
 }
 
+/* =========================
+   SALIR
+========================= */
 .btn-logout{
-    background:#ffebee;
-    color:#c62828;
-    border:1px solid #ffcdd2;
+
+    background:linear-gradient(
+        135deg,
+        #ff6b6b,
+        #e31b23
+    );
+
+    color:white;
+
+    border:1px solid rgba(227,27,35,.15);
+
+    box-shadow:
+        0 6px 16px rgba(227,27,35,.25);
 }
 
 .btn-logout:hover{
-    background:#ffcdd2;
+
+    color:white;
+    text-decoration:none;
+
+    transform:translateY(-2px);
+
+    background:linear-gradient(
+        135deg,
+        #ff7b7b,
+        #d91c24
+    );
+
+    box-shadow:
+        0 10px 24px rgba(227,27,35,.35);
 }
 </style>
 </head>
@@ -207,7 +315,7 @@ hr{
     <div class="top-actions">
 
     <!-- 🔙 VOLVER -->
-    <a href="javascript:history.back()" class="btn-back">
+    <a href="dashboard.php" class="btn-back">
         🔙 Volver
     </a>
 
@@ -233,25 +341,30 @@ hr{
 <?php } ?>
 
 <form method="POST" enctype="multipart/form-data" class="mt-3">
-
+<input type="hidden"
+       name="csrf_token"
+       value="<?= $_SESSION['csrf_token'] ?>">
 <!-- EVENTO -->
 <div class="mb-3">
 <label>Nombre del Evento</label>
-<input type="text" name="nombre" class="form-control" required>
+<input type="text"
+       name="nombre"
+       class="form-control"
+       required>
 </div>
 
 <div class="mb-3">
 <label>Descripción</label>
-<textarea name="descripcion" class="form-control" rows="3" required></textarea>
+<textarea name="descripcion" class="form-control" rows="5" required></textarea>
 </div>
 <div class="mb-3">
-<label>📌 Detalles del evento</label>
-<textarea name="detalles_evento" class="form-control" rows="4"></textarea>
+<label>📌 Detalles del evento  • @ # ✔ °</label>
+<textarea name="detalles_evento" class="form-control" rows="8"></textarea>
 </div>
 
 <div class="mb-3">
-<label>🎯 Información importante</label>
-<textarea name="info_importante" class="form-control" rows="4"></textarea>
+<label>🎯 Información importante  • @ # ✔ °</label>
+<textarea name="info_importante" class="form-control" rows="8"></textarea>
 </div>
 <div class="row">
 

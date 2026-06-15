@@ -1,6 +1,11 @@
 <?php
 session_start();
+
 include("../../db.php");
+include("rate_limit.php");
+
+// 🔒 Máximo 5 intentos fallidos en 5 minutos
+verificarRateLimit($conn, "login", 5, 300);
 
 // 🔐 Evitar acceso si ya está logueado
 if(isset($_SESSION['id_admin'])){
@@ -15,19 +20,13 @@ if(empty($_SESSION['csrf_token'])){
 
 $error = "";
 
-// 🔐 control de intentos
-if(!isset($_SESSION['intentos'])){
-    $_SESSION['intentos'] = 0;
-}
-
-if($_SESSION['intentos'] >= 5){
-    die("Demasiados intentos. Intenta más tarde.");
-}
-
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
-    // CSRF VALIDATION
-    if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']){
+    // 🔐 Validar CSRF
+    if(
+        !isset($_POST['csrf_token']) ||
+        !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+    ){
         die("Solicitud inválida.");
     }
 
@@ -52,9 +51,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
         $admin = $resultado->fetch_assoc();
 
-        // VERIFICACIÓN SEGURA
         if(password_verify($password, $admin['password'])){
 
+            // 🔒 Regenerar sesión
             session_regenerate_id(true);
 
             $_SESSION['id_admin'] = $admin['id'];
@@ -62,22 +61,37 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $_SESSION['correo'] = $admin['correo'];
             $_SESSION['rol'] = $admin['rol'];
 
-            $_SESSION['intentos'] = 0;
+            // 🧹 Limpiar intentos fallidos de esta IP
+            $ip = $_SERVER['REMOTE_ADDR'];
+
+            $stmtDelete = $conn->prepare("
+                DELETE FROM rate_limit
+                WHERE ip = ?
+                AND accion = 'login'
+            ");
+
+            $stmtDelete->bind_param("s", $ip);
+            $stmtDelete->execute();
 
             header("Location: dashboard.php");
             exit;
 
         } else {
-            $_SESSION['intentos']++;
+
+            // ❌ Registrar intento fallido
+            registrarIntento($conn, "login");
+
             $error = "Usuario o contraseña incorrectos.";
         }
 
     } else {
-        $_SESSION['intentos']++;
+
+        // ❌ Registrar intento fallido
+        registrarIntento($conn, "login");
+
         $error = "Usuario o contraseña incorrectos.";
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -95,133 +109,336 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 
 <style>
-
 *{
-font-family:'Poppins',sans-serif;
+    font-family:'Poppins',sans-serif;
 }
 
 body{
-background: linear-gradient(135deg,#00c853,#43a047,#1b5e20);
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
+    background:
+    radial-gradient(circle at center,
+    #6b0000 0%,
+    #350000 35%,
+    #120000 65%,
+    #050505 100%);
+
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
 }
 
+/* =========================
+   CARD LOGIN
+========================= */
 .login-card{
-background:white;
-width:100%;
-max-width:420px;
-padding:40px;
-border-radius:25px;
-box-shadow:0 15px 50px rgba(0,0,0,.25);
+
+    background:
+    linear-gradient(
+    180deg,
+    rgba(10,10,10,.96),
+    rgba(0,0,0,.96)
+    );
+
+    width:100%;
+    max-width:430px;
+
+    padding:35px;
+
+    border-radius:28px;
+
+    border:2px solid rgba(255,40,40,.8);
+
+    box-shadow:
+    0 0 15px rgba(255,0,0,.45),
+    0 0 60px rgba(255,0,0,.15),
+    0 20px 50px rgba(0,0,0,.7);
+
+    backdrop-filter:blur(10px);
+
+    position:relative;
 }
 
+/* brillo superior */
+.login-card::before{
+    content:"";
+    position:absolute;
+    top:-2px;
+    left:25px;
+    right:25px;
+    height:6px;
+
+    background:#ff2b2b;
+
+    border-radius:30px;
+
+    box-shadow:
+    0 0 15px #ff0000,
+    0 0 35px #ff0000;
+}
+
+/* =========================
+   LOGO
+========================= */
 .logo{
-font-size:55px;
-text-align:center;
-margin-bottom:10px;
+    font-size:58px;
+    text-align:center;
+    margin-bottom:8px;
 }
 
+/* =========================
+   TITULO
+========================= */
 .titulo{
-text-align:center;
-font-weight:900;
-margin-bottom:5px;
+    text-align:center;
+    font-weight:900;
+    margin-bottom:5px;
+    color:#fff;
+    letter-spacing:1px;
+    text-transform:uppercase;
 }
 
+.titulo span{
+    color:#ff2020;
+
+    text-shadow:
+        0 0 8px rgba(255,0,0,.7),
+        0 0 15px rgba(255,0,0,.5);
+}
+
+/* =========================
+   SUBTITULO
+========================= */
 .subtitulo{
-text-align:center;
-color:#777;
-margin-bottom:25px;
+    text-align:center;
+    color:#d8d8d8;
+    font-size:14px;
+    margin-bottom:30px;
+    font-weight:500;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:15px;
 }
 
+.subtitulo::before,
+.subtitulo::after{
+    content:"";
+    width:55px;
+    height:2px;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        #ff2020
+    );
+
+    box-shadow:
+        0 0 8px rgba(255,0,0,.7);
+}
+
+.subtitulo::after{
+    background:linear-gradient(
+        90deg,
+        #ff2020,
+        transparent
+    );
+}
+
+
+/* =========================
+   LABELS
+========================= */
+label{
+    color:#fff;
+    font-size:15px;
+    font-weight:800;
+    text-transform:uppercase;
+    margin-bottom:8px;
+}
+
+/* =========================
+   INPUTS
+========================= */
+.form-control{
+
+    background:#070707 !important;
+
+    color:#fff !important;
+
+    border:2px solid rgba(255,30,30,.85);
+
+    border-radius:16px;
+
+    padding:14px 16px;
+
+    margin-top:6px;
+    margin-bottom:15px;
+
+    box-shadow:none;
+
+    transition:.25s;
+}
+
+.form-control::placeholder{
+    color:#888;
+}
+
+.form-control:focus{
+
+    background:#070707;
+
+    color:white;
+
+    border-color:#ff3d3d;
+
+    box-shadow:
+    0 0 10px rgba(255,0,0,.25);
+
+    outline:none;
+}
+
+/* =========================
+   BOTON INGRESAR
+========================= */
 .btn-login{
-width:100%;
-border:none;
-padding:14px;
-font-weight:700;
-border-radius:50px;
-background:linear-gradient(135deg,#00c853,#43a047);
-color:white;
+
+    width:100%;
+    border:none;
+
+    padding:16px;
+
+    border-radius:18px;
+
+    font-weight:900;
+    font-size:20px;
+
+    color:#fff;
+
+    background:
+    linear-gradient(
+    180deg,
+    #ff3030 0%,
+    #ff0000 100%
+    );
+
+    box-shadow:
+    0 0 15px rgba(255,0,0,.5),
+    0 10px 25px rgba(255,0,0,.25);
+
+    transition:.25s;
 }
 
 .btn-login:hover{
-opacity:.9;
+
+    transform:translateY(-2px);
+
+    box-shadow:
+    0 0 20px rgba(255,0,0,.8),
+    0 15px 35px rgba(255,0,0,.35);
 }
+
+/* =========================
+   BOTÓN VOLVER
+========================= */
 .back-index{
-    position:absolute;
+
+    position:fixed;
     top:20px;
     left:20px;
+
     text-decoration:none;
-    font-size:13px;
-    padding:8px 12px;
-    border-radius:30px;
-    background:rgba(255,255,255,0.15);
-    color:white;
-    border:1px solid rgba(255,255,255,0.3);
-    backdrop-filter: blur(10px);
-    transition:.3s;
-    font-weight:600;
+
+    color:#fff;
+
+    padding:10px 16px;
+
+    border-radius:12px;
+
+    background:rgba(0,0,0,.45);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(10px);
+
+    transition:.25s;
+
+    z-index:9999;
 }
 
 .back-index:hover{
-    transform:translateY(-2px);
-    background:rgba(255,255,255,0.25);
+    background:rgba(255,0,0,.18);
     color:white;
 }
+
+/* =========================
+   BOTON WEB
+========================= */
 .btn-publico{
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 9999;
+
+    position:fixed;
+    top:20px;
+    right:20px;
+
+    z-index:9999;
 
     display:inline-flex;
     align-items:center;
     gap:8px;
 
-    padding:10px 18px;
+    padding:10px 16px;
 
-    background:#fff;
-    color:#555;
+    color:#fff;
     text-decoration:none;
-    font-weight:600;
 
-    border:1px solid #dcdfe4;
     border-radius:12px;
+
+    background:rgba(0,0,0,.45);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(10px);
 
     transition:.25s;
 }
 
 .btn-publico:hover{
-    background:#f8f9fa;
-    color:#198754;
-    border-color:#198754;
-    transform:translateY(-2px);
-    text-decoration:none;
-
-    box-shadow:0 6px 15px rgba(25,135,84,.10);
+    background:rgba(255,0,0,.18);
+    color:#fff;
 }
-@media (max-width: 576px){
 
-    .back-index{
-        position:fixed;
-        top:15px;
-        left:15px;
-        font-size:12px;
-        padding:8px 10px;
-        z-index:9999;
+/* =========================
+   ALERTAS
+========================= */
+.alert{
+    border:none;
+    border-radius:14px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media(max-width:576px){
+
+    .login-card{
+        max-width:95%;
+        padding:25px;
     }
 
     .btn-publico{
-        position:fixed;
-        top:60px; /* debajo del botón volver */
-        right:15px;
+        top:65px;
+        right:10px;
         font-size:12px;
-        padding:8px 10px;
-        max-width:180px;
-        text-align:center;
     }
 
+    .back-index{
+        left:10px;
+        top:10px;
+        font-size:12px;
+    }
 }
 </style>
 
@@ -233,8 +450,9 @@ opacity:.9;
 
 <div class="logo">🏃</div>
 
-<h2 class="titulo">ESTACIÓN 88</h2>
-
+<h2 class="titulo">
+    ESTACIÓN <span>88</span>
+</h2>
 <p class="subtitulo">Panel de Administración</p>
 
 <?php if($error){ ?>

@@ -1,6 +1,8 @@
 <?php
 session_start();
+
 include("sesion_check.php");
+include("csrf.php");
 include("../../db.php");
 
 // 🔐 SOLO ADMIN PUEDE ENTRAR
@@ -12,12 +14,46 @@ $error = "";
 $success = "";
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
+    if(
+    !isset($_POST['csrf_token']) ||
+    !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+){
+    die("Solicitud inválida");
+}
 
     $usuario = trim($_POST['usuario']);
-    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+    $passwordPlano = $_POST['password'];
+
+    if(strlen($passwordPlano) < 8){
+    $error = "La contraseña debe tener al menos 8 caracteres";
+    }
+
+    $password = password_hash(
+    $passwordPlano,
+    PASSWORD_BCRYPT
+    );
+    
     $nombre = trim($_POST['nombre']);
-    $correo = trim($_POST['correo']);
+
+    $correo = filter_var(
+    trim($_POST['correo']),
+    FILTER_VALIDATE_EMAIL
+                        );
+
+    if(!$correo){
+    $error = "Correo inválido";
+    }
+    // Rol
     $rol = $_POST['rol'];
+    $rolesPermitidos = [
+    'ADMIN',
+    'OPERADOR',
+    'LECTOR'
+    ];
+
+    if(!in_array($rol, $rolesPermitidos)){
+    die("Rol inválido");
+    }
 
     // validar usuario
     $check = $conn->prepare("SELECT id FROM staff_eventos WHERE usuario = ?");
@@ -53,43 +89,43 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 <style>
 
-body{
+    body{
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #00c853, #43a047, #1b5e20);
+    background: linear-gradient(135deg, #000000, #1d0101, #050303);
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
-}
+    }
 
-.card-box{
+    .card-box{
     background: #fff;
     width: 100%;
     max-width: 500px;
     border-radius: 25px;
     padding: 35px;
     box-shadow: 0 20px 60px rgba(0,0,0,.25);
-}
+    }
 
-.title{
+    .title{
     text-align: center;
     font-weight: 900;
     margin-bottom: 5px;
-}
+    }
 
-.subtitle{
+    .subtitle{
     text-align: center;
     color: #777;
     margin-bottom: 25px;
-}
+    }
 
-.form-control{
+    .form-control{
     border-radius: 12px;
     padding: 10px;
-}
+    }
 
-.btn-create{
+    .btn-create{
     width: 100%;
     border: none;
     padding: 14px;
@@ -98,26 +134,26 @@ body{
     color: white;
     background: linear-gradient(135deg, #00c853, #43a047);
     transition: .3s;
-}
+    }
 
-.btn-create:hover{
+    .btn-create:hover{
     transform: translateY(-2px);
     opacity: .95;
-}
+    }
 
-.role-badge{
+    .role-badge{
     font-size: 12px;
     color: #666;
-}
+    }
 
-.top-actions{
+    .top-actions{
     display:flex;
     justify-content:space-between;
     margin-bottom:20px;
     gap:10px;
-}
+    }
 
-.btn-back, .btn-logout{
+    .btn-back, .btn-logout{
     flex:1;
     text-align:center;
     padding:10px;
@@ -126,27 +162,27 @@ body{
     text-decoration:none;
     transition:.3s;
     font-size:14px;
-}
+    }
 
-.btn-back{
+    .btn-back{
     background:#e0f2f1;
     color:#00695c;
     border:1px solid #b2dfdb;
-}
+    }
 
-.btn-back:hover{
+    .btn-back:hover{
     background:#b2dfdb;
-}
+    }
 
-.btn-logout{
+    .btn-logout{
     background:#ffebee;
     color:#c62828;
     border:1px solid #ffcdd2;
-}
+    }
 
-.btn-logout:hover{
+    .btn-logout:hover{
     background:#ffcdd2;
-}
+    }
 </style>
 
 </head>
@@ -183,6 +219,9 @@ body{
     <?php } ?>
 
     <form method="POST">
+        <input type="hidden"
+       name="csrf_token"
+       value="<?= $_SESSION['csrf_token'] ?>">
 
         <div class="mb-3">
             <label>Usuario</label>

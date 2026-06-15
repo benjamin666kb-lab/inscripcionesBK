@@ -4,11 +4,20 @@
 </div>
 <?php } ?>
 <?php
+
 session_start();
+
 include("sesion_check.php");
+include("csrf.php");
 include("../../db.php");
 
-$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+    die("Método no permitido");
+}
+
+validar_csrf($_POST['csrf_token']);
+
+$id = intval($_POST['id']);
 
 if($id <= 0){
     die("ID inválido");

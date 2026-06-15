@@ -3,6 +3,13 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 session_start();
 include("../db.php");
+include("admin/csrf.php");
+
+if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+    die("Método no permitido");
+}
+
+validar_csrf($_POST['csrf_token'] ?? '');
 
 // 🔥 DATOS DEL FORMULARIO
 $evento_id = $_POST['evento_id'] ?? 0;
@@ -14,10 +21,14 @@ $dni       = trim($_POST['dni']);
 $telefono  = trim($_POST['telefono']);
 $correo    = trim($_POST['correo']);
 
+$club_equipo = trim($_POST['club_equipo'] ?? '');
+$acepta_responsabilidad =
+isset($_POST['acepta_responsabilidad']) ? 1 : 0;
+
 $edad      = $_POST['edad'];
 $distancia = $_POST['distancia'] ?? '';
 $talla     = $_POST['talla'] ?? '';
-
+$categoria = trim($_POST['categoria']);
 // 🔥 VALIDAR KIT
 $kit_query = $conn->query("
     SELECT * 
@@ -61,6 +72,7 @@ $codigo = $prefijo . "-" . date("Y") . "-" . strtoupper(substr(md5(uniqid()), 0,
 $dni = trim(preg_replace('/\s+/', '', $dni));
 $telefono = trim(preg_replace('/\s+/', '', $telefono));
 
+
 // 🔥 INSERT INSCRIPCIÓN
 $sql = "INSERT INTO inscritos
 (
@@ -70,9 +82,12 @@ $sql = "INSERT INTO inscritos
     dni,
     telefono,
     correo,
+    club_equipo,
+    acepta_responsabilidad,
     edad,
     distancia,
     talla,
+    categoria,
     kit_id,
     kit,
     monto,
@@ -81,6 +96,9 @@ $sql = "INSERT INTO inscritos
 )
 VALUES
 (
+    ?,
+    ?,
+    ?,
     ?,
     ?,
     ?,
@@ -105,16 +123,19 @@ if(!$stmt){
 
 // 🔥 TIPOS (IMPORTANTE)
 $stmt->bind_param(
-    "isssssissisd",
+    "isssssisssisd",
     $evento_id,
     $codigo,
     $nombre,
     $dni,
     $telefono,
     $correo,
+    $club_equipo,
+    $acepta_responsabilidad,
     $edad,
     $distancia,
     $talla,
+    $categoria,
     $kit_id,
     $kit,
     $monto

@@ -17,129 +17,557 @@ $result = mysqli_query($conn, $sql);
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
 <style>
-body{
-    background: linear-gradient(135deg,#0f172a,#1e293b);
-    color:white;
-    font-family: Arial;
+
+:root{
+    --rojo:#e31b23;
+    --rojo-hover:#ff3038;
+
+    --negro:#000;
+    --gris-oscuro:#111;
+    --gris-card:#161616;
+
+    --texto:#fff;
+    --texto-soft:#cfcfcf;
 }
 
-.container{
-    margin-top:50px;
+/* =========================
+   BODY
+========================= */
+
+body{
+    background:
+    linear-gradient(
+        180deg,
+        #111111f3 0%,
+        #2e2e2ef1 100%
+    );
+
+    padding-top:80px;
+    color:white;
+    font-family:'Poppins',sans-serif;
 }
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container{
+    margin-top:70px;
+    margin-bottom:60px;
+}
+
+/* =========================
+   TITULO
+========================= */
 
 .title{
     text-align:center;
-    margin-bottom:40px;
-    font-weight:800;
+    margin-bottom:15px;
+    font-weight:900;
+    font-size:clamp(2rem,5vw,3rem);
 }
 
-/* CARD */
+.subtitle{
+
+    text-align:center;
+
+    color:#bdbdbd;
+
+    margin-bottom:50px;
+
+    max-width:700px;
+
+    margin-left:auto;
+    margin-right:auto;
+}
+
+/* =========================
+   CARD
+========================= */
+
 .event-card{
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 20px;
+
+    background:var(--gris-card);
+
+    border-radius:22px;
+
     overflow:hidden;
-    transition:0.3s;
-    backdrop-filter: blur(10px);
-    cursor:pointer;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.35s;
+
+    height:100%;
 }
 
 .event-card:hover{
-    transform: translateY(-8px);
-    border: 1px solid #38bdf8;
+
+    transform:translateY(-8px);
+
+    border-color:
+    rgba(227,27,35,.40);
+
+    box-shadow:
+    0 20px 40px rgba(0,0,0,.40);
 }
 
-/* IMAGEN */
+/* =========================
+   IMAGEN
+========================= */
+
 .event-img{
-    height:180px;
-    background:#111;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+
+    height:220px;
+
     overflow:hidden;
+
+    position:relative;
 }
 
-/* CUERPO */
+.event-img img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    transition:.5s;
+}
+
+.event-card:hover img{
+
+    transform:scale(1.05);
+}
+
+/* =========================
+   BODY CARD
+========================= */
+
 .event-body{
-    padding:20px;
+
+    padding:24px;
 }
 
-/* BADGES */
+.event-body h5{
+
+    font-weight:800;
+
+    margin-bottom:10px;
+
+    color:white;
+}
+
+.event-body p{
+
+    color:var(--texto-soft);
+
+    margin-bottom:15px;
+}
+
+/* =========================
+   FECHA
+========================= */
+
+.event-date{
+
+    color:#ff6b6b;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    margin-bottom:12px;
+}
+
+/* =========================
+   BADGES
+========================= */
+
 .badge-activo{
-    background:#22c55e;
+
+    background:#e31b23;
+
+    color:white;
+
+    padding:8px 14px;
+
+    border-radius:50px;
+
+    font-size:12px;
 }
 
 .badge-proximo{
-    background:#64748b;
+
+    background:#444;
+
+    color:white;
+
+    padding:8px 14px;
+
+    border-radius:50px;
+
+    font-size:12px;
 }
 
-/* BOTÓN */
+/* =========================
+   BOTON
+========================= */
+
 .btn-event{
-    background:#38bdf8;
+
+    background:var(--rojo);
+
     border:none;
+
     width:100%;
-    padding:10px;
-    border-radius:10px;
-    color:black;
-    font-weight:bold;
-    transition:0.2s;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    color:white;
+
+    font-weight:700;
+
+    transition:.3s;
 }
 
 .btn-event:hover{
-    background:#0ea5e9;
+
+    background:var(--rojo-hover);
+
+    transform:translateY(-2px);
+}
+
+/* =========================
+   EFECTO PREMIUM
+========================= */
+
+.event-card::after{
+
+    content:"";
+
+    display:block;
+
+    height:4px;
+
+    background:var(--rojo);
+
+    width:0;
+
+    transition:.35s;
+}
+
+.event-card:hover::after{
+
+    width:100%;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+    .event-img{
+        height:200px;
+    }
+
+    .event-body{
+        padding:20px;
+    }
+
+}
+
+/* =========================
+   CONTENEDOR GENERAL (LIGHT PREMIUM)
+========================= */
+
+.search-ticket-card{
+
+    max-width:750px;
+    
+    margin:auto;
+
+    background:#ffffff;
+    border:1px solid rgba(0,0,0,.08);
+    border-radius:24px;
+
+    padding:40px 30px;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.08);
+
+    position:relative;
+    overflow:hidden;
+
+    transition:.3s;
+}
+
+.search-ticket-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 25px 50px rgba(0,0,0,.12);
+}
+
+/* línea superior roja elegante */
+.search-ticket-card::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:4px;
+    background:linear-gradient(90deg, var(--rojo), #ff6b6b);
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.search-header{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.search-header h2{
+    font-weight:900;
+    color:#1e293b;
+    margin-bottom:8px;
+    font-size:clamp(1.5rem,3vw,2.2rem);
+}
+
+.search-header p{
+    color:#64748b;
+    margin:0;
+    font-size:15px;
+}
+
+/* =========================
+   SEARCH BOX
+========================= */
+
+.search-box{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    align-items:center;
+}
+
+/* INPUT (CLARO MODERNO) */
+.search-box input{
+
+    flex:1;
+
+    padding:14px 16px;
+    border-radius:14px;
+
+    border:1px solid #e2e8f0;
+
+    background:#f8fafc;
+    color:#0f172a;
+
+    font-size:16px;
+
+    outline:none;
+
+    transition:.25s;
+}
+
+.search-box input:focus{
+    border-color:var(--rojo);
+    background:#ffffff;
+    box-shadow:0 0 0 3px rgba(227,27,35,.12);
+}
+
+/* BUTTON */
+.search-box button{
+
+    padding:14px 22px;
+
+    border:none;
+    border-radius:14px;
+
+    background:var(--rojo);
+    color:white;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    min-width:120px;
+}
+
+.search-box button:hover{
+    background:var(--rojo-hover);
+    transform:translateY(-2px);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+    .search-box{
+        flex-direction:column;
+    }
+
+    .search-box button{
+        width:100%;
+    }
+}
+.navbar88{
+
+    position:fixed;
+    top:15px;
+    left:50%;
+    transform:translateX(-50%);
+
+    width:95%;
+    max-width:1400px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:15px 35px;
+
+    background:rgba(34, 34, 34, 0.23);
+
+    backdrop-filter:blur(10px);
+
+    border:1px solid rgba(255, 255, 255, 0.24);
+
+    border-radius:50px;
+
+    z-index:9999;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.35);
+}
+
+/* LOGO */
+
+.logo88{
+    font-size:1.8rem;
+    font-weight:800;
+    color:white;
+}
+
+.logo88 span{
+    color:#e31b23;
+}
+
+/* MENU */
+
+.menu88{
+    display:flex;
+    gap:40px;
+}
+
+.menu88 a{
+
+    color:white;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    position:relative;
+
+    transition:.3s;
+}
+
+.menu88 a:hover{
+    color:#e31b23;
+}
+
+/* linea animada */
+
+.menu88 a::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    bottom:-6px;
+
+    width:0;
+    height:2px;
+
+    background:#e31b23;
+
+    transition:.3s;
+}
+
+.menu88 a:hover::after{
+    width:100%;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .navbar88{
+        padding:15px 20px;
+    }
+    .menu88{
+        gap:18px;
+        font-size:13px;
+    }
+    .logo88{
+        font-size:1.2rem;
+    }
 }
 </style>
-</head>
+<header class="navbar88">
 
+    <div class="logo88">
+        🏃 Estación<span>88</span>
+    </div>
+
+    <nav class="menu88">
+        <a href="https://www.estacion88.com/events">Carreras & Eventos</a>
+        <a href="https://www.estacion88.com/nosotros">Nosotros</a>
+        <a href="https://www.estacion88.com/contacto">Contacto</a>
+    </nav>
+
+</header>
+</head>
+    
 <body>
+
+</div>
 <section class="container my-5">
 
-    <div class="card shadow border-0 rounded-4">
+    <div class="search-ticket-card">
 
-        <div class="card-body p-4 text-center">
-
-            <h2 class="fw-bold mb-3">
-                🔎 Consultar mi inscripción
-            </h2>
-
-            <p class="text-muted">
-                Ingresa tu DNI para buscar tus tickets registrados.
-            </p>
-
-            <form action="buscar_ticket.php" method="GET">
-
-                <div class="row justify-content-center">
-
-                    <div class="col-md-6">
-
-                        <input
-                            type="text"
-                            name="dni"
-                            class="form-control form-control-lg"
-                            maxlength="8"
-                            pattern="[0-9]{8}"
-                            placeholder="Ingrese su DNI"
-                            required>
-
-                    </div>
-
-                    <div class="col-md-2 mt-3 mt-md-0">
-
-                        <button
-                            type="submit"
-                            class="btn btn-success btn-lg w-100">
-
-                            Buscar
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </form>
-
+        <div class="search-header">
+            <h2>🔎 Consultar mi inscripción</h2>
+            <p>Ingresa tu DNI para buscar tus tickets registrados</p>
         </div>
+
+        <form action="buscar_ticket.php" method="GET" class="search-form">
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    name="dni"
+                    maxlength="8"
+                    pattern="[0-9]{8}"
+                    placeholder="Ingrese su DNI"
+                    required>
+
+                <button type="submit">
+                    Buscar
+                </button>
+
+            </div>
+
+        </form>
 
     </div>
 
@@ -147,7 +575,28 @@ body{
 <div class="container">
 
 <h1 class="title">🎟 Eventos Disponibles</h1>
+<p class="subtitle">
+Descubre carreras, campeonatos y actividades organizadas.
+Inscríbete en línea y recibe tu ticket digital automáticamente.
+</p>
+<div class="row text-center mb-5">
 
+<div class="col-4">
+<h3>1500+</h3>
+<small>Participantes</small>
+</div>
+
+<div class="col-4">
+<h3>25+</h3>
+<small>Eventos</small>
+</div>
+
+<div class="col-4">
+<h3>100%</h3>
+<small>Digital</small>
+</div>
+
+</div>
 <div class="row g-4">
 
 <?php while($ev = mysqli_fetch_assoc($result)){ ?>
