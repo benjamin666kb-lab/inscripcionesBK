@@ -155,84 +155,84 @@ Comprobante de inscripción
 <div class="col-md-6 item">
 <div class="label">Código</div>
 <div class="valor">
-<?php echo $inscrito['codigo']; ?>
+<?php echo htmlspecialchars($inscrito['codigo'], ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Estado</div>
 <div class="valor" style="color:<?php echo $colorEstado; ?>">
-<?php echo $estadoMostrar; ?>
+<?php echo htmlspecialchars($estadoMostrar, ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Nombre</div>
 <div class="valor">
-<?php echo $inscrito['nombre']; ?>
+<?php echo htmlspecialchars($inscrito['nombre'], ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">DNI</div>
 <div class="valor">
-<?php echo $inscrito['dni']; ?>
+<?php echo htmlspecialchars($inscrito['dni'], ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Teléfono</div>
 <div class="valor">
-<?php echo $inscrito['telefono']; ?>
+<?php echo htmlspecialchars($inscrito['telefono'], ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Correo</div>
 <div class="valor">
-<?php echo $inscrito['correo']; ?>
+<?php echo htmlspecialchars($inscrito['correo'], ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Edad</div>
 <div class="valor">
-<?php echo $inscrito['edad']; ?>
+<?php echo htmlspecialchars($inscrito['edad'], ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Distancia</div>
 <div class="valor">
-<?php echo $inscrito['distancia']; ?>
+<?php echo htmlspecialchars($inscrito['distancia'], ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Talla</div>
 <div class="valor">
-<?php echo $inscrito['talla']; ?>
+<?php echo htmlspecialchars($inscrito['talla'], ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Kit</div>
 <div class="valor">
-<?php echo $inscrito['kit']; ?>
+<?php echo htmlspecialchars($inscrito['kit'], ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Monto</div>
 <div class="valor">
-S/ <?php echo number_format($inscrito['monto'],2); ?>
+S/ <?php echo number_format((float)$inscrito['monto'], 2); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Fecha del Evento</div>
 <div class="valor">
-<?php echo $inscrito['fecha_evento']; ?>
+<?php echo htmlspecialchars($inscrito['fecha_evento'], ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 

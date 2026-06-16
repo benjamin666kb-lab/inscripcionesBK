@@ -147,7 +147,7 @@ text-align:center;
 
 <div class="form-control bg-light">
 
-<?php echo $inscrito['evento']; ?>
+<?= htmlspecialchars($inscrito['evento'], ENT_QUOTES, 'UTF-8'); ?>
 
 </div>
 
@@ -159,7 +159,7 @@ text-align:center;
 
 <div class="form-control bg-light">
 
-<?php echo $inscrito['codigo']; ?>
+<?= htmlspecialchars($inscrito['codigo'], ENT_QUOTES, 'UTF-8'); ?>
 
 </div>
 
@@ -171,7 +171,7 @@ text-align:center;
 
 <div class="form-control bg-light">
 
-<?php echo $inscrito['nombre']; ?>
+<?= htmlspecialchars($inscrito['nombre'], ENT_QUOTES, 'UTF-8'); ?>
 
 </div>
 
@@ -183,7 +183,7 @@ text-align:center;
 
 <div class="form-control bg-light">
 
-<?php echo $inscrito['dni']; ?>
+<?= htmlspecialchars($inscrito['dni'], ENT_QUOTES, 'UTF-8'); ?>
 
 </div>
 
@@ -195,7 +195,7 @@ text-align:center;
 
 <div class="form-control bg-light">
 
-<?php echo $inscrito['correo']; ?>
+<?= htmlspecialchars($inscrito['correo'], ENT_QUOTES, 'UTF-8'); ?>
 
 </div>
 
@@ -207,7 +207,7 @@ text-align:center;
 
 <div class="form-control bg-light">
 
-<?php echo $inscrito['telefono']; ?>
+<?= htmlspecialchars($inscrito['telefono'], ENT_QUOTES, 'UTF-8'); ?>
 
 </div>
 
@@ -219,7 +219,7 @@ text-align:center;
 
 <div class="form-control bg-light">
 
-<?php echo $inscrito['kit']; ?>
+<?= htmlspecialchars($inscrito['kit'], ENT_QUOTES, 'UTF-8'); ?>
 
 </div>
 
@@ -243,7 +243,7 @@ S/ <?php echo number_format($inscrito['monto'],2); ?>
 
 <div class="form-control bg-light">
 
-<?php echo $inscrito['distancia']; ?>
+<?= htmlspecialchars($inscrito['distancia'], ENT_QUOTES, 'UTF-8'); ?>
 
 </div>
 
@@ -255,7 +255,7 @@ S/ <?php echo number_format($inscrito['monto'],2); ?>
 
 <div class="form-control bg-light">
 
-<?php echo $inscrito['talla']; ?>
+<?= htmlspecialchars($inscrito['talla'], ENT_QUOTES, 'UTF-8'); ?>
 
 </div>
 
@@ -267,7 +267,7 @@ S/ <?php echo number_format($inscrito['monto'],2); ?>
 
 <div class="form-control bg-light">
 
-<?php echo $inscrito['estado_pago']; ?>
+<?= htmlspecialchars($inscrito['estado_pago'], ENT_QUOTES, 'UTF-8'); ?>
 
 </div>
 
@@ -287,7 +287,7 @@ S/ <?php echo number_format($inscrito['monto'],2); ?>
 
 <div class="codigo">
 
-<?php echo $inscrito['codigo']; ?>
+<?= htmlspecialchars($inscrito['codigo'], ENT_QUOTES, 'UTF-8'); ?>
 
 </div>
 
@@ -297,7 +297,7 @@ S/ <?php echo number_format($inscrito['monto'],2); ?>
     <h5>📱 Tu Código QR</h5>
 
     <img
-        src="<?php echo $qr_url; ?>"
+        src="<?= htmlspecialchars($qr_url, ENT_QUOTES, 'UTF-8'); ?>"
         alt="QR Ticket"
         width="220"
         style="border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,.15);">

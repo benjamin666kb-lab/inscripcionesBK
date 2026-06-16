@@ -6,7 +6,7 @@ include("../../db.php");
 
 // 🔐 SOLO ADMIN
 if(!isset($_SESSION['id_admin'])){
-    header("Location: login.php");
+    header("Location: login");
     exit;
 }
 
@@ -55,16 +55,68 @@ if(isset($_POST['actualizar'])){
     $detalles_evento = $_POST['detalles_evento'];
     $info_importante = $_POST['info_importante'];
 
-    // 🔥 IMAGEN
-    $imagen = $evento['imagen_portada'];
+    /* 🔥 IMAGEN */
+$imagen = $evento['imagen_portada'];
 
-    if(!empty($_FILES['imagen']['name'])){
+if(!empty($_FILES['imagen']['name'])){
 
-        $ext = pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION);
-        $imagen = time() . "." . $ext;
+    // Extensiones permitidas
+    $permitidas = ['jpg','jpeg','png','webp'];
 
-        move_uploaded_file($_FILES['imagen']['tmp_name'], "../../uploads/" . $imagen);
+    $ext = strtolower(
+        pathinfo(
+            $_FILES['imagen']['name'],
+            PATHINFO_EXTENSION
+        )
+    );
+
+    if(!in_array($ext, $permitidas)){
+        die("Solo se permiten imágenes JPG, JPEG, PNG o WEBP.");
     }
+
+    // Validar MIME real
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+
+    $mime = finfo_file(
+        $finfo,
+        $_FILES['imagen']['tmp_name']
+    );
+
+    finfo_close($finfo);
+
+    $mimePermitidos = [
+        'image/jpeg',
+        'image/png',
+        'image/webp'
+    ];
+
+    if(!in_array($mime, $mimePermitidos)){
+        die("Archivo inválido.");
+    }
+
+    // Máximo 5 MB
+    if($_FILES['imagen']['size'] > 5 * 1024 * 1024){
+        die("La imagen supera los 5 MB.");
+    }
+
+    // Nombre aleatorio
+    $imagen = uniqid('evento_', true) . "." . $ext;
+
+    if(!move_uploaded_file(
+        $_FILES['imagen']['tmp_name'],
+        "../../uploads/" . $imagen
+    )){
+        die("Error al subir la imagen.");
+    }
+
+    // Opcional: eliminar imagen anterior
+    if(
+        !empty($evento['imagen_portada']) &&
+        file_exists("../../uploads/" . $evento['imagen_portada'])
+    ){
+        unlink("../../uploads/" . $evento['imagen_portada']);
+    }
+}
 
     $update = $conn->prepare("
         UPDATE eventos 
@@ -126,7 +178,7 @@ if(!empty($_POST['kits_nombre'])){
         $stmtKit->execute();
     }
 }
-        header("Location: eventos_lista.php?editado=1");
+        header("Location: eventos_lista?editado=1");
         exit;
     } else {
         die("Error al actualizar: " . $conn->error);
@@ -214,12 +266,12 @@ if(!empty($_POST['kits_nombre'])){
     <div class="top-actions">
 
     <!-- 🔙 VOLVER -->
-    <a href="dashboard.php" class="btn-back">
+    <a href="dashboard" class="btn-back">
         🔙 Volver
     </a>
 
     <!-- 🚪 SALIR -->
-    <a href="logout.php" class="btn-logout">
+    <a href="logout" class="btn-logout">
         🚪 Salir
     </a>
 

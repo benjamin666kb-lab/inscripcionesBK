@@ -417,6 +417,10 @@ body{
         width:100%;
     }
 }
+/* =========================
+   NAVBAR
+========================= */
+
 .navbar88{
 
     position:fixed;
@@ -433,38 +437,33 @@ body{
 
     padding:15px 35px;
 
-    background:rgba(34, 34, 34, 0.23);
+    background:rgba(34,34,34,.23);
 
     backdrop-filter:blur(10px);
 
-    border:1px solid rgba(255, 255, 255, 0.24);
+    border:1px solid rgba(255,255,255,.24);
 
     border-radius:50px;
 
     z-index:9999;
 
-    box-shadow:
-    0 10px 30px rgba(0,0,0,.35);
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
 }
 
 /* LOGO */
 
-.logo88{
-    font-size:1.8rem;
-    font-weight:800;
-    color:white;    
-}
 .logo88 a{
     font-size:1.8rem;
     font-weight:800;
     color:white;
-    text-decoration:none;    
+    text-decoration:none;
 }
+
 .logo88 span{
     color:#e31b23;
 }
 
-/* MENU */
+/* MENU DESKTOP */
 
 .menu88{
     display:flex;
@@ -488,8 +487,6 @@ body{
     color:#e31b23;
 }
 
-/* linea animada */
-
 .menu88 a::after{
 
     content:"";
@@ -511,39 +508,106 @@ body{
     width:100%;
 }
 
-/* MOBILE */
+/* BOTON HAMBURGUESA */
+
+.btn-menu88{
+
+    display:none;
+
+    background:none;
+
+    border:none;
+
+    color:white;
+
+    font-size:32px;
+
+    cursor:pointer;
+
+    line-height:1;
+}
+
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:768px){
 
     .navbar88{
+
         padding:15px 20px;
+
+        border-radius:25px;
     }
+
+    .logo88 a{
+        font-size:1.3rem;
+    }
+
+    .btn-menu88{
+        display:block;
+    }
+
     .menu88{
-        gap:18px;
-        font-size:13px;
+
+        position:absolute;
+
+        top:75px;
+        left:0;
+
+        width:100%;
+
+        display:none;
+
+        flex-direction:column;
+
+        align-items:center;
+
+        gap:15px;
+
+        padding:20px;
+
+        background:rgba(34,34,34,.95);
+
+        backdrop-filter:blur(12px);
+
+        border-radius:20px;
+
+        box-shadow:0 15px 30px rgba(0,0,0,.35);
     }
-    .logo88{
-        font-size:1.2rem;
+
+    .menu88.active{
+        display:flex;
+    }
+
+    .menu88 a{
+        width:100%;
+        padding:10px 0;
+        text-align:center;
     }
 }
 </style>
+
+</head>
+
+<body>
 <header class="navbar88">
 
     <div class="logo88">
         <a href="https://www.estacion88.com/">🏃 Estación<span>88</span></a>
     </div>
 
-    <nav class="menu88">
+    <button class="btn-menu88" id="btnMenu88">
+        ☰
+    </button>
+
+    <nav class="menu88" id="menu88">
         <a href="https://www.estacion88.com/events">Carreras & Eventos</a>
         <a href="https://www.estacion88.com/nosotros">Nosotros</a>
         <a href="https://www.estacion88.com/contacto">Contacto</a>
     </nav>
 
 </header>
-</head>
-    
-<body>
-
 </div>
 <section class="container my-5">
 
@@ -634,21 +698,21 @@ Inscríbete en línea y recibe tu ticket digital automáticamente.
             <?php } ?>
 
             <h4 class="mt-2">
-                <?php echo $ev['nombre']; ?>
+                <?= htmlspecialchars($ev['nombre'], ENT_QUOTES, 'UTF-8'); ?>
             </h4>
 
             <p style="font-size:14px;opacity:0.8;">
-                <?php echo substr($ev['descripcion'],0,90); ?>...
+                <?= htmlspecialchars(substr($ev['descripcion'],0,90), ENT_QUOTES, 'UTF-8'); ?>...
             </p>
 
-            <p>📅 <?php echo $ev['fecha_evento']; ?></p>
+            <p>📅 <?= htmlspecialchars($ev['fecha_evento'], ENT_QUOTES, 'UTF-8'); ?></p>
 
         </div>
 
         </a>
 
         <!-- 🔴 BOTÓN INSCRIPCIÓN -->
-        <a href="inscripcion.?evento_id=<?php echo $ev['id']; ?>">
+        <a href="inscripcion?evento_id=<?php echo $ev['id']; ?>">
             <button class="btn-event">Inscribirme</button>
         </a>
 
@@ -661,6 +725,22 @@ Inscríbete en línea y recibe tu ticket digital automáticamente.
 </div>
 
 </div>
+<script>
 
+const btnMenu88 = document.getElementById('btnMenu88');
+const menu88 = document.getElementById('menu88');
+
+btnMenu88.addEventListener('click', () => {
+
+    menu88.classList.toggle('active');
+
+    btnMenu88.innerHTML =
+        menu88.classList.contains('active')
+        ? '✕'
+        : '☰';
+
+});
+
+</script>
 </body>
 </html>

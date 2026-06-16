@@ -366,11 +366,11 @@ body{
     
     <span class="badge-event">🎟 Evento Oficial</span>
 
-    <h1><?php echo $ev['nombre']; ?></h1>
+    <h1><?= htmlspecialchars($ev['nombre'], ENT_QUOTES, 'UTF-8'); ?></h1>
 
-    <p><?php echo nl2br(htmlspecialchars($ev['descripcion'])); ?></p>
+    <p><?= nl2br(htmlspecialchars($ev['descripcion'], ENT_QUOTES, 'UTF-8')); ?></p>
 
-    <p>📅 <?php echo $ev['fecha_evento']; ?></p>
+    <p>📅 <?= htmlspecialchars($ev['fecha_evento'], ENT_QUOTES, 'UTF-8'); ?></p>
 
     <a href="inscripcion?evento_id=<?php echo $ev['id']; ?>">
         <button class="btn-inscribirme">🚀 INSCRIBIRME AHORA</button>

@@ -3,7 +3,7 @@
 session_start();
 include("sesion_check.php");
 if(!isset($_SESSION['id_admin'])){
-    header("Location: login.php");
+    header("Location: login");
     exit;
 }
 
@@ -275,10 +275,28 @@ S/ <?php echo number_format($inscrito['monto'],2); ?>
 <div class="d-flex gap-2">
 <?php if($_SESSION['rol'] == 'ADMIN'){ ?>
 
-<a href="confirmar_pago.php?id=<?php echo $inscrito['id']; ?>&csrf_token=<?php echo $_SESSION['csrf_token']; ?>"
-class="btn btn-success">
-✔ Confirmar Pago
-</a>
+<form method="POST" action="confirmar_pago" style="display:inline;">
+
+    <input
+        type="hidden"
+        name="id"
+        value="<?= $id ?>">
+
+    <input
+        type="hidden"
+        name="csrf_token"
+        value="<?= $_SESSION['csrf_token'] ?>">
+
+    <button
+        type="submit"
+        class="btn btn-success"
+        onclick="return confirm('¿Confirmar pago manualmente?')">
+
+        Confirmar Pago
+
+    </button>
+
+</form>
 
 <?php } ?>
 <button

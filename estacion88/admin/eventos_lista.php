@@ -5,7 +5,7 @@ include("csrf.php");
 include("../../db.php");
 
 if(!isset($_SESSION['id_admin'])){
-    header("Location: login.php");
+    header("Location: login");
     exit;
 }
 
@@ -163,7 +163,7 @@ h2{
 
     <h2 style="margin:0;">🛠️ Eventos para administrar</h2>
 
-    <a href="dashboard.php" 
+    <a href="dashboard" 
        style="
             background: linear-gradient(135deg,#22c55e,#16a34a);
             color:white;
@@ -197,12 +197,12 @@ h2{
 </div>
 
 <div>
-    <a href="editar_evento.php?id=<?php echo $ev['id']; ?>" class="btn-editar">
+    <a href="editar_evento?id=<?php echo $ev['id']; ?>" class="btn-editar">
         ✏ Editar
     </a>
 
     <form method="POST"
-      action="eliminar_evento.php"
+      action="eliminar_evento"
       style="display:inline;">
 
     <input

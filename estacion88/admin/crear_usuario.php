@@ -193,12 +193,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <div class="top-actions">
 
     <!-- 🔙 VOLVER -->
-    <a href="dashboard.php" class="btn-back">
+    <a href="dashboard" class="btn-back">
         🔙 Volver
     </a>
 
     <!-- 🚪 SALIR -->
-    <a href="logout.php" class="btn-logout">
+    <a href="logout" class="btn-logout">
         🚪 Salir
     </a>
 

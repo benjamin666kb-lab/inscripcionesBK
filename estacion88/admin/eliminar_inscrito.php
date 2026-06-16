@@ -6,7 +6,7 @@ include("sesion_check.php");
 include("csrf.php");
 
 if(!isset($_SESSION['id_admin'])){
-    header("Location: login.php");
+    header("Location: login");
     exit;
 }
 
@@ -32,7 +32,7 @@ $stmt->bind_param("i",$id);
 
 if($stmt->execute()){
 
-    header("Location: inscritos.php?msg=eliminado");
+    header("Location: inscritos?msg=eliminado");
     exit;
 
 }else{

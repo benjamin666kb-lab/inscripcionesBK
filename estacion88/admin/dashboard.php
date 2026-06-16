@@ -3,7 +3,7 @@
 session_start();
 include("sesion_check.php"); // 🔥 PRIMERO control de tiempo
 if(!isset($_SESSION['id_admin'])){
-    header("Location: login.php");
+    header("Location: login");
     exit;
 }
 include("../../db.php");
@@ -199,7 +199,7 @@ font-weight:900;
 <?php echo $_SESSION['nombre']; ?> |
 <?php echo $_SESSION['rol']; ?> |
 
-<a href="logout.php" class="btn btn-light btn-sm">
+<a href="logout" class="btn btn-light btn-sm">
 Salir
 </a>
 
@@ -272,7 +272,7 @@ Salir
 👥 Ver Inscritos
 </a>
 
-<a href="exportar_excel.php" class="btn btn-primary">
+<a href="exportar_excel" class="btn btn-primary">
 📊 Exportar Excel
 </a>
 
@@ -286,22 +286,22 @@ Salir
 
 <div class="d-flex gap-3 flex-wrap">
 
-    <a href="crear_evento.php" class="btn-admin">
+    <a href="crear_evento" class="btn-admin">
         🎟 Crear Evento
     </a>
 
-    <a href="eventos_lista.php" class="btn-admin">
+    <a href="eventos_lista" class="btn-admin">
         🛠 Editar Eventos
     </a>
 
-    <a href="crear_usuario.php" class="btn-admin">
+    <a href="crear_usuario" class="btn-admin">
         👤 Crear Usuario
     </a>
 
 </div>
 
 <?php } ?>
-<a href="https://inscripcionesbk.free.nf/estacion88/index.php"
+<a href="https://inscripcionesbk.free.nf/estacion88/index"
    class="btn-publico"
    target="_blank">
     🌐 Ver Estación88 -> Eventos

@@ -1,6 +1,7 @@
 <?php
 
 include("../db.php");
+require_once("../config_culqi.php");
 
 if(!isset($_GET['id'])){
     header("Location: index");
@@ -317,6 +318,7 @@ if(in_array($inscrito['estado_pago'], $estadosBloqueados)){
 </div>
 <script src="https://js.culqi.com/checkout-js"></script>
 <script>
+const publicKey = "<?php echo CULQI_PUBLIC_KEY; ?>";
 
 const settings = {
     title: "Shrek Run",
@@ -325,7 +327,7 @@ const settings = {
 };
 
 const client = {
-    email: "prueba@correo.com"
+    email: "<?php echo $inscrito['correo']; ?>"
 };
 
 const options = {
@@ -346,25 +348,42 @@ const config = {
     options
 };
 
-const publicKey = "pk_test_8j86Lmv2KMRWu9xP";
 
 const Culqi = new CulqiCheckout(publicKey, config);
 
 const handleCulqiAction = () => {
 
-   if (Culqi.token) {
+    if (Culqi.token) {
 
-    const token = Culqi.token.id;
+        const token = Culqi.token.id;
 
-    window.location.href =
-    "procesar_pago?id=<?php echo $inscrito['id']; ?>&token=" + token;
+        const form = document.createElement("form");
 
-}else {
+        form.method = "POST";
+        form.action = "procesar_pago";
+
+        const inputId = document.createElement("input");
+        inputId.type = "hidden";
+        inputId.name = "id";
+        inputId.value = "<?php echo $inscrito['id']; ?>";
+
+        const inputToken = document.createElement("input");
+        inputToken.type = "hidden";
+        inputToken.name = "token";
+        inputToken.value = token;
+
+        form.appendChild(inputId);
+        form.appendChild(inputToken);
+
+        document.body.appendChild(form);
+
+        form.submit();
+
+    } else {
 
         console.log(Culqi.error);
 
     }
-
 };
 
 Culqi.culqi = handleCulqiAction;

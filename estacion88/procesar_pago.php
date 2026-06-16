@@ -1,13 +1,17 @@
 <?php
 
 include("../db.php");
+require_once("../config_culqi.php");
+if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+    die("Método no permitido.");
+}
 
-if(!isset($_GET['id']) || !isset($_GET['token'])){
+if(!isset($_POST['id']) || !isset($_POST['token'])){
     die("Datos incompletos.");
 }
 
-$id = intval($_GET['id']);
-$token = trim($_GET['token']);
+$id = intval($_POST['id']);
+$token = trim($_POST['token']);
 
 $sql = "SELECT * FROM inscritos WHERE id=?";
 $stmt = $conn->prepare($sql);
@@ -33,11 +37,12 @@ $update->bind_param("i", $id);
 $update->execute();
 
 $monto = intval($inscrito['monto'] * 100);
+$correo = trim($inscrito['correo']);
 
 $data = [
     "amount" => $monto,
     "currency_code" => "PEN",
-    "email" => "accept@culqi.com",
+    "email" => $correo,
     "source_id" => $token
 ];
 
@@ -50,7 +55,7 @@ curl_setopt_array($curl,[
     CURLOPT_POSTFIELDS => json_encode($data),
     CURLOPT_HTTPHEADER => [
         "Content-Type: application/json",
-        "Authorization: Bearer sk_test_DQgiTt1Zu3hMARAk"
+        "Authorization: Bearer " . CULQI_SECRET_KEY
     ]
 ]);
 
@@ -58,6 +63,19 @@ $response = curl_exec($curl);
 
 curl_close($curl);
 
+if(!$response){
+
+    $update = $conn->prepare("
+        UPDATE inscritos
+        SET estado_pago='PENDIENTE'
+        WHERE id=?
+    ");
+
+    $update->bind_param("i", $id);
+    $update->execute();
+
+    die("Error de conexión con Culqi.");
+}
 $respuesta = json_decode($response,true);
 
 if(
@@ -70,8 +88,7 @@ if(
     $sql = "
     UPDATE inscritos
     SET
-        estado_pago='PAGADO',
-        token_culqi=?,
+        estado_pago='PAGADO',        
         cargo_culqi=?,
         fecha_pago=NOW()
     WHERE id=?
@@ -80,8 +97,7 @@ if(
     $stmt = $conn->prepare($sql);
 
     $stmt->bind_param(
-        "ssi",
-        $token,
+        "si",    
         $cargo,
         $id
     );
@@ -95,6 +111,15 @@ if(
     exit;
 
 }else{
+
+    $update = $conn->prepare("
+        UPDATE inscritos
+        SET estado_pago='PENDIENTE'
+        WHERE id=?
+    ");
+
+    $update->bind_param("i", $id);
+    $update->execute();
 
     echo "<h2>Pago rechazado</h2>";
 

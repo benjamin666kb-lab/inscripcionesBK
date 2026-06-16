@@ -4,7 +4,7 @@ session_start();
 include("sesion_check.php");
 include("csrf.php");
 if(!isset($_SESSION['id_admin'])){
-    header("Location: login.php");
+    header("Location: login");
     exit;
 }
 
@@ -37,7 +37,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     $stmt->bind_param("sssii", $nombre, $telefono, $correo, $edad, $id);
 
     if($stmt->execute()){
-        header("Location: inscritos.php?msg=editado");
+        header("Location: inscritos?msg=editado");
     }else{
         echo "Error al actualizar";
     }

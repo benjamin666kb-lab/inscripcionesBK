@@ -8,7 +8,7 @@ include("../../db.php");
    VALIDACIÓN DE SESIÓN
 ========================= */
 if (!isset($_SESSION['id_admin']) || !isset($_SESSION['rol'])) {
-    header("Location: login.php");
+    header("Location: login");
     exit;
 }
 
@@ -28,19 +28,28 @@ if (!isset($_SESSION['csrf_token'])) {
 /* =========================
    VALIDAR ID
 ========================= */
-if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    die("Método no permitido");
+}
+
+if (!isset($_POST['id']) || !is_numeric($_POST['id'])) {
     die("ID no válido");
 }
 
-$id = intval($_GET['id']);
+$id = intval($_POST['id']);
 
 /* =========================
    VALIDAR CSRF
 ========================= */
-if (!isset($_GET['csrf_token']) || $_GET['csrf_token'] !== $_SESSION['csrf_token']) {
+if (
+    !isset($_POST['csrf_token']) ||
+    !hash_equals(
+        $_SESSION['csrf_token'],
+        $_POST['csrf_token']
+    )
+){
     die("Solicitud no válida (CSRF detectado)");
 }
-
 /* =========================
    CONSULTAR ESTADO ACTUAL
 ========================= */
@@ -62,7 +71,7 @@ if (!$fila) {
    VALIDAR SI YA ESTÁ PAGADO
 ========================= */
 if (strtoupper($fila['estado_pago']) === 'PAGADO') {
-    header("Location: detalle_inscrito.php?id=$id&msg=ya_confirmado");
+    header("Location: detalle_inscrito?id=$id&msg=ya_confirmado");
     exit;
 }
 
@@ -77,9 +86,9 @@ if (!$update) {
 $update->bind_param("i", $id);
 
 if ($update->execute()) {
-    header("Location: detalle_inscrito.php?id=$id&msg=ok");
+    header("Location: detalle_inscrito?id=$id&msg=ok");
     exit;
 } else {
-    header("Location: detalle_inscrito.php?id=$id&msg=error");
+    header("Location: detalle_inscrito?id=$id&msg=error");
     exit;
 }

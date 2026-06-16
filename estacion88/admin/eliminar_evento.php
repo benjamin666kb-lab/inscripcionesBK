@@ -41,7 +41,7 @@ $stmt3 = $conn->prepare("DELETE FROM eventos WHERE id = ?");
 $stmt3->bind_param("i", $id);
 
 if($stmt3->execute()){
-    header("Location: eventos_lista.php?deleted=1");
+    header("Location: eventos_lista?deleted=1");
     exit;
 }else{
     die("Error al eliminar evento: " . $stmt3->error);

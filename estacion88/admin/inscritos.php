@@ -3,7 +3,7 @@
 session_start();
 include("sesion_check.php");
 if(!isset($_SESSION['id_admin'])){
-    header("Location: login.php");
+    header("Location: login");
     exit;
 }
 include("csrf.php");
@@ -150,7 +150,7 @@ $resultado = $conn->query($sql);
 <?php echo $_SESSION['nombre']; ?> |
 <?php echo $_SESSION['rol']; ?> |
 
-<a href="logout.php" class="btn btn-light btn-sm">
+<a href="logout" class="btn btn-light btn-sm">
 Salir
 </a>
 
@@ -188,7 +188,7 @@ switch($_GET['msg']){
         👥 Inscritos Estacion88
     </h2>
 
-    <a href="dashboard.php" class="btn btn-success">
+    <a href="dashboard" class="btn btn-success">
         ← Dashboard
     </a>
 
@@ -231,54 +231,50 @@ switch($_GET['msg']){
 
 <tr>
 
-<td><?= $row['id']; ?></td>
-<td><?= $row['codigo']; ?></td>
-<td><?= $row['nombre']; ?></td>
-<td><?= $row['dni']; ?></td>
-<td><?= $row['telefono']; ?></td>
-<td><?= $row['correo']; ?></td>
-<td><?= $row['edad']; ?></td>
-<td><?= $row['distancia']; ?></td>
-<td><?= $row['talla']; ?></td>
+<td><?= htmlspecialchars($row['id'], ENT_QUOTES, 'UTF-8'); ?></td>
+<td><?= htmlspecialchars($row['codigo'], ENT_QUOTES, 'UTF-8'); ?></td>
+<td><?= htmlspecialchars($row['nombre'], ENT_QUOTES, 'UTF-8'); ?></td>
+<td><?= htmlspecialchars($row['dni'], ENT_QUOTES, 'UTF-8'); ?></td>
+<td><?= htmlspecialchars($row['telefono'], ENT_QUOTES, 'UTF-8'); ?></td>
+<td><?= htmlspecialchars($row['correo'], ENT_QUOTES, 'UTF-8'); ?></td>
+<td><?= htmlspecialchars($row['edad'], ENT_QUOTES, 'UTF-8'); ?></td>
+<td><?= htmlspecialchars($row['distancia'], ENT_QUOTES, 'UTF-8'); ?></td>
+<td><?= htmlspecialchars($row['talla'], ENT_QUOTES, 'UTF-8'); ?></td>
+
 <td>
     <?php if(!empty($row['categoria'])){ ?>
-        <?= $row['categoria']; ?>
+        <?= htmlspecialchars($row['categoria'], ENT_QUOTES, 'UTF-8'); ?>
     <?php } ?>
 </td>
-<td><?= $row['kit']; ?></td>
 
-<td>S/ <?= number_format($row['monto'],2); ?></td>
+<td><?= htmlspecialchars($row['kit'], ENT_QUOTES, 'UTF-8'); ?></td>
+
+<td>S/ <?= number_format((float)$row['monto'],2); ?></td>
 
 <td>
-
 <?php
 $estado = strtoupper(trim($row['estado_pago'] ?? 'LIBRE'));
 
 if($estado === "PAGADO"){ ?>
-
     <span class="badge bg-success">PAGADO</span>
-
 <?php } elseif($estado === "PENDIENTE"){ ?>
-
     <span class="badge bg-warning text-dark">PENDIENTE</span>
-
 <?php } else { ?>
-
     <span class="badge bg-primary">LIBRE</span>
-
 <?php } ?>
-
 </td>
 
-<td><?= $row['fecha_registro']; ?></td>
-<td><?= $row['club_equipo']; ?></td>
+<td><?= htmlspecialchars($row['fecha_registro'], ENT_QUOTES, 'UTF-8'); ?></td>
+
+<td><?= htmlspecialchars($row['club_equipo'], ENT_QUOTES, 'UTF-8'); ?></td>
+
 <td>
 
 <?php if($esLector){ ?>
 
     <span class="badge bg-secondary">Solo lectura</span>
     <!-- VER -->
-    <a href="detalle_inscrito.php?id=<?= $row['id'] ?>" class="btn btn-info btn-sm mb-1">
+    <a href="detalle_inscrito?id=<?= $row['id'] ?>" class="btn btn-info btn-sm mb-1">
         Ver
     </a>
 
@@ -302,7 +298,7 @@ if($estado === "PAGADO"){ ?>
 
         <!-- ELIMINAR -->
         <form method="POST" 
-      action="eliminar_inscrito.php"
+      action="eliminar_inscrito"
       style="display:inline;">
 
     <input

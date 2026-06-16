@@ -5,11 +5,11 @@ include("../../db.php");
 include("rate_limit.php");
 
 // 🔒 Máximo 5 intentos fallidos en 5 minutos
-verificarRateLimit($conn, "login", 5, 300);
+verificarRateLimit($conn, "login.php", 5, 300);
 
 // 🔐 Evitar acceso si ya está logueado
 if(isset($_SESSION['id_admin'])){
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit;
 }
 
@@ -73,13 +73,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $stmtDelete->bind_param("s", $ip);
             $stmtDelete->execute();
 
-            header("Location: dashboard.php");
+            header("Location: dashboard");
             exit;
 
         } else {
 
             // ❌ Registrar intento fallido
-            registrarIntento($conn, "login");
+            registrarIntento($conn, "login.php");
 
             $error = "Usuario o contraseña incorrectos.";
         }
@@ -87,7 +87,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     } else {
 
         // ❌ Registrar intento fallido
-        registrarIntento($conn, "login");
+        registrarIntento($conn, "login.php");
 
         $error = "Usuario o contraseña incorrectos.";
     }
@@ -496,10 +496,10 @@ label{
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-<a href="../index.php" class="back-index">
+<a href="../index" class="back-index">
 ← Volver al inicio
 </a>
-<a href="https://inscripcionesbk.free.nf/estacion88/index.php"
+<a href="https://inscripcionesbk.free.nf/estacion88/index"
    class="btn-publico"
    target="_blank">
     🌐 Ver Estación88 -> Eventos

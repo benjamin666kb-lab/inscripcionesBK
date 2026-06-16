@@ -132,7 +132,7 @@ if(!empty($_FILES['imagen']['name'])){
             }
         }
 
-        header("Location: crear_evento.php?ok=1");
+        header("Location: crear_evento?ok=1");
         exit;
 
     }else{
@@ -315,12 +315,12 @@ if(!empty($_FILES['imagen']['name'])){
     <div class="top-actions">
 
     <!-- 🔙 VOLVER -->
-    <a href="dashboard.php" class="btn-back">
+    <a href="dashboard" class="btn-back">
         🔙 Volver
     </a>
 
     <!-- 🚪 SALIR -->
-    <a href="logout.php" class="btn-logout">
+    <a href="logout" class="btn-logout">
         🚪 Salir
     </a>
 

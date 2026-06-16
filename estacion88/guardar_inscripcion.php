@@ -10,55 +10,63 @@ if($_SERVER['REQUEST_METHOD'] !== 'POST'){
 validar_csrf($_POST['csrf_token'] ?? '');
 
 // 🔥 DATOS DEL FORMULARIO
-$evento_id = $_POST['evento_id'] ?? 0;
-$kit_id    = $_POST['kit_id'] ?? 0;
+$evento_id = (int) ($_POST['evento_id'] ?? 0);
+$kit_id    = (int) ($_POST['kit_id'] ?? 0);
 
-$nombre    = trim($_POST['nombre']);
-
-$dni       = trim($_POST['dni']);
-$telefono  = trim($_POST['telefono']);
-$correo    = trim($_POST['correo']);
+$nombre    = trim($_POST['nombre'] ?? '');
+$dni       = trim($_POST['dni'] ?? '');
+$telefono  = trim($_POST['telefono'] ?? '');
+$correo    = trim($_POST['correo'] ?? '');
 
 $club_equipo = trim($_POST['club_equipo'] ?? '');
-$acepta_responsabilidad =
-isset($_POST['acepta_responsabilidad']) ? 1 : 0;
+$acepta_responsabilidad = isset($_POST['acepta_responsabilidad']) ? 1 : 0;
 
-$edad      = $_POST['edad'];
-$distancia = $_POST['distancia'] ?? '';
-$talla     = $_POST['talla'] ?? '';
-$categoria = trim($_POST['categoria']);
+$edad      = (int) ($_POST['edad'] ?? 0);
+$distancia = trim($_POST['distancia'] ?? '');
+$talla     = trim($_POST['talla'] ?? '');
+$categoria = trim($_POST['categoria'] ?? '');
+
 // 🔥 VALIDAR KIT
-$kit_query = $conn->query("
-    SELECT * 
+$kit_query = $conn->prepare("
+    SELECT nombre_kit, precio 
     FROM eventos_kits 
-    WHERE id = $kit_id 
-    AND evento_id = $evento_id
+    WHERE id = ? 
+    AND evento_id = ?
     LIMIT 1
 ");
 
-if(!$kit_query || $kit_query->num_rows == 0){
+$kit_query->bind_param("ii", $kit_id, $evento_id);
+$kit_query->execute();
+
+$result = $kit_query->get_result();
+
+if(!$result || $result->num_rows == 0){
     die("Kit no válido");
 }
 
-$kit_data = $kit_query->fetch_assoc();
+$kit_data = $result->fetch_assoc();
 
 $kit   = $kit_data['nombre_kit'];
 $monto = $kit_data['precio'];
 
-// 🔥 GENERAR CÓDIGO ÚNICO// 🔥 GENERAR CÓDIGO ÚNICO// 🔥 GENERAR CÓDIGO ÚNICO// 🔥 GENERAR CÓDIGO ÚNICO// 🔥 GENERAR CÓDIGO ÚNICO
 // 🔥 OBTENER NOMBRE DEL EVENTO
-$evento_query = $conn->query("
+$evento_query = $conn->prepare("
     SELECT nombre 
     FROM eventos 
-    WHERE id = $evento_id 
+    WHERE id = ?
     LIMIT 1
 ");
 
-if(!$evento_query || $evento_query->num_rows == 0){
+$evento_query->bind_param("i", $evento_id);
+$evento_query->execute();
+
+$result_evento = $evento_query->get_result();
+
+if(!$result_evento || $result_evento->num_rows == 0){
     die("Evento no válido");
 }
 
-$evento_data = $evento_query->fetch_assoc();
+$evento_data = $result_evento->fetch_assoc();
 $evento_nombre = $evento_data['nombre'];
 
 // 🔥 TOMAR 3 PRIMERAS LETRAS LIMPIAS

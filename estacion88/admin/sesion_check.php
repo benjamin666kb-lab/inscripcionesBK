@@ -18,7 +18,7 @@ if ((time() - $_SESSION['ultima_actividad']) > $tiempo_limite) {
     session_destroy();
 
     $mensaje = urlencode("Su sesión fue cerrada por inactividad. Han transcurrido más de 10 minutos sin actividad.");
-    header("Location: login.php?mensaje=$mensaje");
+    header("Location: login?mensaje=$mensaje");
     exit;
 }
 
