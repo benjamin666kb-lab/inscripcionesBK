@@ -121,10 +121,20 @@ if(
     $update->bind_param("i", $id);
     $update->execute();
 
-    echo "<h2>Pago rechazado</h2>";
+    // Registrar detalle técnico
+    error_log(
+        "Culqi rechazó pago. Inscripción ID: {$id} | Respuesta: "
+        . json_encode($respuesta)
+    );
 
-    echo "<pre>";
-    print_r($respuesta);
-    echo "</pre>";
+    // Mensaje amigable para el usuario
+    $mensaje = "No fue posible procesar el pago. Verifique los datos de su tarjeta e intente nuevamente.";
+
+    if(isset($respuesta['user_message'])){
+        $mensaje = $respuesta['user_message'];
+    }
+
+    echo "<h2>Pago rechazado</h2>";
+    echo "<p>" . htmlspecialchars($mensaje, ENT_QUOTES, 'UTF-8') . "</p>";
 
 }

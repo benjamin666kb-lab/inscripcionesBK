@@ -5,7 +5,7 @@
 <?php } ?>
 <?php
 
-session_start();
+ 
 
 include("sesion_check.php");
 include("csrf.php");

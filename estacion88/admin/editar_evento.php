@@ -1,5 +1,5 @@
 <?php
-session_start();
+ 
 include("sesion_check.php");
 include("csrf.php");
 include("../../db.php");
@@ -290,25 +290,28 @@ if(!empty($_POST['kits_nombre'])){
 <form method="POST" enctype="multipart/form-data">
 <input type="hidden"
        name="csrf_token"
-       value="<?= $_SESSION['csrf_token'] ?>">
+       value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
 <div class="mb-3">
 <label>Nombre</label>
 <input type="text" name="nombre" class="form-control"
-value="<?php echo $evento['nombre']; ?>" required>
+value="<?= htmlspecialchars($evento['nombre'], ENT_QUOTES, 'UTF-8'); ?>" required>
 </div>
 
 <div class="mb-3">
 <label>Descripción</label>
-<textarea name="descripcion" class="form-control" rows="5" required><?php echo $evento['descripcion']; ?></textarea>
+<textarea name="descripcion" class="form-control" rows="5" required>
+    <?= htmlspecialchars($evento['descripcion'], ENT_QUOTES, 'UTF-8'); ?></textarea>
 </div>
 <div class="mb-3">
 <label>📌 Detalles del evento  • @ # ✔ °</label>
-<textarea name="detalles_evento" class="form-control" rows="8"><?php echo $detalles_evento; ?></textarea>
+<textarea name="detalles_evento" class="form-control" rows="8">
+    <?= htmlspecialchars($detalles_evento, ENT_QUOTES, 'UTF-8'); ?></textarea>
 </div>
 
 <div class="mb-3">
 <label>🎯 Información importante  • @ # ✔ °</label>
-<textarea name="info_importante" class="form-control" rows="8"><?php echo $info_importante; ?></textarea>
+<textarea name="info_importante" class="form-control" rows="8">
+    <?= htmlspecialchars($info_importante, ENT_QUOTES, 'UTF-8'); ?></textarea>
 </div>
 
 <div class="row">
@@ -316,7 +319,7 @@ value="<?php echo $evento['nombre']; ?>" required>
 <div class="col-md-6 mb-3">
 <label>Fecha</label>
 <input type="date" name="fecha_evento" class="form-control"
-value="<?php echo $evento['fecha_evento']; ?>" required>
+value="<?= htmlspecialchars($evento['fecha_evento'], ENT_QUOTES, 'UTF-8'); ?>" required>
 </div>
 
 <div class="col-md-6 mb-3">
@@ -342,7 +345,7 @@ value="<?php echo $evento['fecha_evento']; ?>" required>
 <label>Imagen actual</label><br>
 
 <?php if(!empty($evento['imagen_portada'])){ ?>
-    <img src="../../uploads/<?php echo $evento['imagen_portada']; ?>" width="150" style="
+    <img src="../../uploads/<?= rawurlencode($evento['imagen_portada']); ?>" width="150" style="
                 width:220px;
                 max-width:100%;
                 border-radius:15px;

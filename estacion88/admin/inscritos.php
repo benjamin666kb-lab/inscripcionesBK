@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+ 
 include("sesion_check.php");
 if(!isset($_SESSION['id_admin'])){
     header("Location: login");

@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 include("sesion_check.php");
 include("csrf.php");
 
@@ -32,7 +30,7 @@ $stmt->bind_param("i",$id);
 
 if($stmt->execute()){
 
-    header("Location: inscritos?msg=eliminado");
+    header("Location: inscritos.php?msg=eliminado");
     exit;
 
 }else{

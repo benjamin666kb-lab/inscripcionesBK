@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+
 include("sesion_check.php");
 include("../../db.php");
 

@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+ 
 include("sesion_check.php");
 include("csrf.php");
 if(!isset($_SESSION['id_admin'])){
@@ -37,7 +37,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     $stmt->bind_param("sssii", $nombre, $telefono, $correo, $edad, $id);
 
     if($stmt->execute()){
-        header("Location: inscritos?msg=editado");
+        header("Location: inscritos.php?msg=editado");
     }else{
         echo "Error al actualizar";
     }
@@ -63,15 +63,15 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     <input
         type="hidden"
         name="csrf_token"
-        value="<?= $_SESSION['csrf_token'] ?>">
+        value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
 
-<input class="form-control mb-2" name="nombre" value="<?= $inscrito['nombre'] ?>" placeholder="Nombre">
+<input class="form-control mb-2" name="nombre" value="<?= htmlspecialchars($inscrito['nombre'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="Nombre">
 
-<input class="form-control mb-2" name="telefono" value="<?= $inscrito['telefono'] ?>" placeholder="Teléfono">
+<input class="form-control mb-2" name="telefono" value="<?= htmlspecialchars($inscrito['telefono'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="Teléfono">
 
-<input class="form-control mb-2" name="correo" value="<?= $inscrito['correo'] ?>" placeholder="Correo">
+<input class="form-control mb-2" name="correo" value="<?= htmlspecialchars($inscrito['correo'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="Correo">
 
-<input class="form-control mb-2" name="edad" value="<?= $inscrito['edad'] ?>" placeholder="Edad">
+<input class="form-control mb-2" name="edad" value="<?= htmlspecialchars($inscrito['edad'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="Edad">
 
 <button class="btn btn-primary">Guardar cambios</button>
 

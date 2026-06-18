@@ -1,6 +1,5 @@
 <?php
-
-session_start();
+ 
 include("sesion_check.php");
 if(!isset($_SESSION['id_admin'])){
     header("Location: login");
@@ -172,108 +171,116 @@ body{
 
 <div class="header-card">
     <h2>🏃 Detalle del Participante</h2>
-    <small>|   Comprobante de inscripción</small>
+    <small>| Comprobante de inscripción</small>
 </div>
+
 <div class="contenido">
 <div class="row">
 
 <div class="col-md-6 item">
 <div class="label">Código</div>
 <div class="valor">
-<?php echo $inscrito['codigo']; ?>
+<?= htmlspecialchars($inscrito['codigo'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Estado</div>
 <div class="valor" style="color:red">
-<?php echo $inscrito['estado_pago']; ?>
+<?= htmlspecialchars($inscrito['estado_pago'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Nombre</div>
 <div class="valor">
-<?php echo $inscrito['nombre']; ?>
+<?= htmlspecialchars($inscrito['nombre'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">DNI</div>
 <div class="valor">
-<?php echo $inscrito['dni']; ?>
+<?= htmlspecialchars($inscrito['dni'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Teléfono</div>
 <div class="valor">
-<?php echo $inscrito['telefono']; ?>
+<?= htmlspecialchars($inscrito['telefono'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Correo</div>
 <div class="valor">
-<?php echo $inscrito['correo']; ?>
+<?= htmlspecialchars($inscrito['correo'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Edad</div>
 <div class="valor">
-<?php echo $inscrito['edad']; ?>
+<?= htmlspecialchars($inscrito['edad'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Distancia</div>
 <div class="valor">
-<?php echo $inscrito['distancia']; ?>
+<?= htmlspecialchars($inscrito['distancia'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Talla</div>
 <div class="valor">
-<?php echo $inscrito['talla']; ?>
+<?= htmlspecialchars($inscrito['talla'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Categoría</div>
 <div class="valor">
-<?php echo $inscrito['categoria']; ?>
+<?= htmlspecialchars($inscrito['categoria'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Kit</div>
 <div class="valor">
-<?php echo $inscrito['kit']; ?>
+<?= htmlspecialchars($inscrito['kit'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 <div class="col-md-6 item">
 <div class="label">Monto</div>
 <div class="valor">
-S/ <?php echo number_format($inscrito['monto'],2); ?>
+S/ <?= number_format((float)$inscrito['monto'], 2); ?>
 </div>
 </div>
 
 <div class="col-md-12 item">
 <div class="label">Fecha Registro</div>
 <div class="valor">
-<?php echo $inscrito['fecha_registro']; ?>
+<?= htmlspecialchars($inscrito['fecha_registro'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
 </div>
 </div>
 
 </div>
-
 <hr>
 
 <div class="d-flex gap-2">
-<?php if($_SESSION['rol'] == 'ADMIN'){ ?>
+<?php
+$estado = strtoupper(trim($inscrito['estado_pago'] ?? ''));
+
+if(
+    $_SESSION['rol'] == 'ADMIN'
+    && (float)$inscrito['monto'] > 0
+    && $estado !== 'PAGADO'
+){
+?>
 
 <form method="POST" action="confirmar_pago" style="display:inline;">
 

@@ -1,6 +1,5 @@
 <?php
 
-session_start();
 include("sesion_check.php"); // 🔥 PRIMERO control de tiempo
 if(!isset($_SESSION['id_admin'])){
     header("Location: login");

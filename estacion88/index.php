@@ -3,8 +3,22 @@ session_start();
 include("../db.php");
 
 // 🔥 Obtener todos los eventos activos
-$sql = "SELECT * FROM eventos WHERE estado='activo' ORDER BY fecha_evento DESC";
-$result = mysqli_query($conn, $sql);
+$sql = "
+SELECT *
+FROM eventos
+WHERE estado=?
+ORDER BY fecha_evento DESC
+";
+
+$stmt = $conn->prepare($sql);
+
+$estado = 'activo';
+
+$stmt->bind_param("s", $estado);
+
+$stmt->execute();
+
+$result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -21,11 +35,9 @@ $result = mysqli_query($conn, $sql);
 :root{
     --rojo:#e31b23;
     --rojo-hover:#ff3038;
-
     --negro:#000;
     --gris-oscuro:#111;
     --gris-card:#161616;
-
     --texto:#fff;
     --texto-soft:#cfcfcf;
 }
@@ -36,16 +48,10 @@ $result = mysqli_query($conn, $sql);
 
 body{
     background:
-    linear-gradient(
-        180deg,
-        #111111f3 0%,
-        #2e2e2ef1 100%
-    );
-
+    linear-gradient(180deg, #111111f3 0%, #2e2e2ef1 100%);
     padding-top:80px;
     color:white;
-    font-family:'Poppins',sans-serif;
-}
+    font-family:'Poppins',sans-serif;}
 
 /* =========================
    CONTAINER
@@ -53,8 +59,7 @@ body{
 
 .container{
     margin-top:70px;
-    margin-bottom:60px;
-}
+    margin-bottom:60px;}
 
 /* =========================
    TITULO
@@ -64,8 +69,7 @@ body{
     text-align:center;
     margin-bottom:15px;
     font-weight:900;
-    font-size:clamp(2rem,5vw,3rem);
-}
+    font-size:clamp(2rem,5vw,3rem);}
 
 .subtitle{
 
@@ -78,8 +82,7 @@ body{
     max-width:700px;
 
     margin-left:auto;
-    margin-right:auto;
-}
+    margin-right:auto;}
 
 /* =========================
    CARD
@@ -88,25 +91,19 @@ body{
 .event-card{
 
     background:var(--gris-card);
-
     border-radius:22px;
-
     overflow:hidden;
-
     border:1px solid rgba(255,255,255,.08);
-
     transition:.35s;
-
     height:100%;
-}
+    display:flex;
+    flex-direction:column;}
 
 .event-card:hover{
 
     transform:translateY(-8px);
-
     border-color:
     rgba(227,27,35,.40);
-
     box-shadow:
     0 20px 40px rgba(0,0,0,.40);
 }
@@ -118,9 +115,7 @@ body{
 .event-img{
 
     height:220px;
-
     overflow:hidden;
-
     position:relative;
 }
 
@@ -128,14 +123,11 @@ body{
 
     width:100%;
     height:100%;
-
     object-fit:cover;
-
     transition:.5s;
 }
 
 .event-card:hover img{
-
     transform:scale(1.05);
 }
 
@@ -144,23 +136,18 @@ body{
 ========================= */
 
 .event-body{
-
     padding:24px;
+    flex:1;
 }
 
 .event-body h5{
-
     font-weight:800;
-
     margin-bottom:10px;
-
     color:white;
 }
 
 .event-body p{
-
     color:var(--texto-soft);
-
     margin-bottom:15px;
 }
 
@@ -169,45 +156,29 @@ body{
 ========================= */
 
 .event-date{
-
     color:#ff6b6b;
-
     font-size:14px;
-
     font-weight:700;
-
-    margin-bottom:12px;
-}
+    margin-bottom:12px;}
 
 /* =========================
    BADGES
 ========================= */
 
 .badge-activo{
-
     background:#e31b23;
-
     color:white;
-
     padding:8px 14px;
-
     border-radius:50px;
-
-    font-size:12px;
-}
+    font-size:12px;}
 
 .badge-proximo{
 
     background:#444;
-
     color:white;
-
     padding:8px 14px;
-
     border-radius:50px;
-
-    font-size:12px;
-}
+    font-size:12px;}
 
 /* =========================
    BOTON
@@ -216,19 +187,12 @@ body{
 .btn-event{
 
     background:var(--rojo);
-
     border:none;
-
     width:100%;
-
     padding:12px;
-
     border-radius:12px;
-
     color:white;
-
     font-weight:700;
-
     transition:.3s;
 }
 
@@ -246,20 +210,14 @@ body{
 .event-card::after{
 
     content:"";
-
     display:block;
-
     height:4px;
-
     background:var(--rojo);
-
     width:0;
-
     transition:.35s;
 }
 
 .event-card:hover::after{
-
     width:100%;
 }
 
@@ -272,11 +230,9 @@ body{
     .event-img{
         height:200px;
     }
-
     .event-body{
         padding:20px;
     }
-
 }
 
 /* =========================
@@ -285,21 +241,15 @@ body{
 
 .search-ticket-card{
 
-    max-width:750px;
-    
+    max-width:750px;    
     margin:auto;
-
     background:#ffffff;
     border:1px solid rgba(0,0,0,.08);
     border-radius:24px;
-
     padding:40px 30px;
-
     box-shadow:0 15px 35px rgba(0,0,0,.08);
-
     position:relative;
     overflow:hidden;
-
     transition:.3s;
 }
 
@@ -359,16 +309,11 @@ body{
 
     padding:14px 16px;
     border-radius:14px;
-
     border:1px solid #e2e8f0;
-
     background:#f8fafc;
     color:#0f172a;
-
     font-size:16px;
-
     outline:none;
-
     transition:.25s;
 }
 
@@ -382,19 +327,13 @@ body{
 .search-box button{
 
     padding:14px 22px;
-
     border:none;
     border-radius:14px;
-
     background:var(--rojo);
     color:white;
-
     font-weight:800;
-
     cursor:pointer;
-
     transition:.3s;
-
     min-width:120px;
 }
 
@@ -412,7 +351,6 @@ body{
     .search-box{
         flex-direction:column;
     }
-
     .search-box button{
         width:100%;
     }
@@ -427,26 +365,17 @@ body{
     top:15px;
     left:50%;
     transform:translateX(-50%);
-
     width:95%;
     max-width:1400px;
-
     display:flex;
     justify-content:space-between;
     align-items:center;
-
     padding:15px 35px;
-
     background:rgba(34,34,34,.23);
-
     backdrop-filter:blur(10px);
-
     border:1px solid rgba(255,255,255,.24);
-
     border-radius:50px;
-
     z-index:9999;
-
     box-shadow:0 10px 30px rgba(0,0,0,.35);
 }
 
@@ -473,13 +402,9 @@ body{
 .menu88 a{
 
     color:white;
-
     text-decoration:none;
-
     font-weight:700;
-
     position:relative;
-
     transition:.3s;
 }
 
@@ -490,17 +415,12 @@ body{
 .menu88 a::after{
 
     content:"";
-
     position:absolute;
-
     left:0;
     bottom:-6px;
-
     width:0;
     height:2px;
-
     background:#e31b23;
-
     transition:.3s;
 }
 
@@ -513,17 +433,11 @@ body{
 .btn-menu88{
 
     display:none;
-
     background:none;
-
     border:none;
-
     color:white;
-
     font-size:32px;
-
     cursor:pointer;
-
     line-height:1;
 }
 
@@ -534,9 +448,7 @@ body{
 @media(max-width:768px){
 
     .navbar88{
-
         padding:15px 20px;
-
         border-radius:25px;
     }
 
@@ -551,28 +463,17 @@ body{
     .menu88{
 
         position:absolute;
-
         top:75px;
         left:0;
-
         width:100%;
-
         display:none;
-
         flex-direction:column;
-
         align-items:center;
-
         gap:15px;
-
         padding:20px;
-
         background:rgba(34,34,34,.95);
-
         backdrop-filter:blur(12px);
-
         border-radius:20px;
-
         box-shadow:0 15px 30px rgba(0,0,0,.35);
     }
 
@@ -712,7 +613,7 @@ Inscríbete en línea y recibe tu ticket digital automáticamente.
         </a>
 
         <!-- 🔴 BOTÓN INSCRIPCIÓN -->
-        <a href="inscripcion?evento_id=<?php echo $ev['id']; ?>">
+        <a href="inscripcion?evento_id=<?php echo $ev['id']; ?>" style="margin-top:auto;">
             <button class="btn-event">Inscribirme</button>
         </a>
 

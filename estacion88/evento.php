@@ -7,9 +7,17 @@ if(!isset($_GET['id'])){
 
 $id = intval($_GET['id']);
 
-$sql = "SELECT * FROM eventos WHERE id=$id LIMIT 1";
-$result = mysqli_query($conn, $sql);
-$ev = mysqli_fetch_assoc($result);
+$sql = "SELECT * FROM eventos WHERE id=? LIMIT 1";
+
+$stmt = $conn->prepare($sql);
+
+$stmt->bind_param("i", $id);
+
+$stmt->execute();
+
+$result = $stmt->get_result();
+
+$ev = $result->fetch_assoc();
 
 if(!$ev){
     die("Evento no existe");
@@ -22,7 +30,7 @@ if(!$ev){
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title><?php echo $ev['nombre']; ?></title>
+<title><?= htmlspecialchars($ev['nombre'] ?? '', ENT_QUOTES, 'UTF-8'); ?></title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -224,7 +232,7 @@ body{
    CARDS
 ========================= */
 .card-info{
-    background: rgba(209, 248, 248, 0.61);
+    background: rgba(255, 255, 255, 0.9);
 
     border:1px solid var(--border);
 

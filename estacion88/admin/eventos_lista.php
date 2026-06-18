@@ -1,5 +1,5 @@
 <?php
-session_start();
+ 
 include("sesion_check.php");
 include("csrf.php");
 include("../../db.php");
@@ -31,11 +31,9 @@ $result = $conn->query($sql);
 :root{
     --rojo:#e31b23;
     --rojo-hover:#ff3038;
-
     --negro:#000;
     --gris-oscuro:#111;
     --gris-card:#161616;
-
     --texto:#fff;
     --texto-soft:#cfcfcf;
 }
@@ -73,11 +71,9 @@ h2{
     border-radius:18px;
     padding:18px 20px;
     margin-bottom:15px;
-
     display:flex;
     justify-content:space-between;
     align-items:center;
-
     transition:.3s ease;
 }
 
@@ -187,44 +183,46 @@ h2{
 
 <div>
     <h5>
-        <?php echo $ev['nombre']; ?>
+        <?= htmlspecialchars($ev['nombre'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
         <span class="badge-estado">
-            <?php echo $ev['estado']; ?>
+            <?= htmlspecialchars($ev['estado'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
         </span>
     </h5>
 
-    <small>📅 <?php echo $ev['fecha_evento']; ?></small>
+    <small>
+        📅 <?= htmlspecialchars($ev['fecha_evento'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+    </small>
 </div>
 
 <div>
-    <a href="editar_evento?id=<?php echo $ev['id']; ?>" class="btn-editar">
+    <a href="editar_evento?id=<?= urlencode($ev['id']); ?>" class="btn-editar">
         ✏ Editar
     </a>
 
     <form method="POST"
-      action="eliminar_evento"
-      style="display:inline;">
+          action="eliminar_evento"
+          style="display:inline;">
 
-    <input
-        type="hidden"
-        name="id"
-        value="<?php echo $ev['id']; ?>">
+        <input
+            type="hidden"
+            name="id"
+            value="<?= htmlspecialchars($ev['id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
 
-    <input
-        type="hidden"
-        name="csrf_token"
-        value="<?php echo $_SESSION['csrf_token']; ?>">
+        <input
+            type="hidden"
+            name="csrf_token"
+            value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
 
-    <button
-        type="submit"
-        class="btn-eliminar"
-        onclick="return confirm('¿Seguro que deseas eliminar este evento?');">
+        <button
+            type="submit"
+            class="btn-eliminar"
+            onclick="return confirm('¿Seguro que deseas eliminar este evento?');">
 
-        🗑 Eliminar
+            🗑 Eliminar
 
-    </button>
+        </button>
 
-</form>
+    </form>
 </div>
 
 </div>

@@ -318,16 +318,16 @@ if(in_array($inscrito['estado_pago'], $estadosBloqueados)){
 </div>
 <script src="https://js.culqi.com/checkout-js"></script>
 <script>
-const publicKey = "<?php echo CULQI_PUBLIC_KEY; ?>";
+const publicKey = <?= json_encode(CULQI_PUBLIC_KEY); ?>;
 
 const settings = {
-    title: "Shrek Run",
-    currency: "PEN",
-    amount: <?php echo intval($inscrito['monto'] * 100); ?>
+    title: <?= json_encode("Shrek Run"); ?>,
+    currency: <?= json_encode("PEN"); ?>,
+    amount: <?= json_encode((int)($inscrito['monto'] * 100)); ?>
 };
 
 const client = {
-    email: "<?php echo $inscrito['correo']; ?>"
+    email: <?= json_encode($inscrito['correo']); ?>
 };
 
 const options = {
@@ -365,7 +365,7 @@ const handleCulqiAction = () => {
         const inputId = document.createElement("input");
         inputId.type = "hidden";
         inputId.name = "id";
-        inputId.value = "<?php echo $inscrito['id']; ?>";
+        inputId.value = <?= json_encode((int)$inscrito['id']); ?>;
 
         const inputToken = document.createElement("input");
         inputToken.type = "hidden";

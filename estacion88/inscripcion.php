@@ -392,7 +392,7 @@ body{
 <div class="formulario">
 <!-- 🔥 MENSAJE DE ERROR -->
 <?php
-session_start();
+
 if(isset($_SESSION['error'])){
 ?>
 <div class="alert alert-danger">

@@ -30,6 +30,11 @@ $stmt->execute();
 $resultado = $stmt->get_result();
 
 $inscrito = $resultado->fetch_assoc();
+if(!$inscrito){
+
+    die("Inscripción no encontrada");
+
+}
 $url_ticket =
 "https://inscripcionesbk.free.nf/estacion88/ticket?codigo="
 . urlencode($inscrito['codigo']);
@@ -38,11 +43,7 @@ $qr_url =
 "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data="
 . urlencode($url_ticket);
 
-if(!$inscrito){
 
-    die("Inscripción no encontrada");
-
-}
 
 ?>
 
