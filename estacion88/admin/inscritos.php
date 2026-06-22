@@ -57,9 +57,9 @@ $resultado = $conn->query($sql);
     linear-gradient(
         90deg,
         #000000 0%,        
-        #e31b23 50%,        
-        #198754 100%
-    );
+        #7c0307 50%,        
+        #c90f0f 100%
+    );    
 
     color:white;
 
@@ -83,6 +83,13 @@ $resultado = $conn->query($sql);
     letter-spacing:1px;
     color:#fff;
     }
+    .topbar span{
+    color:#ff2020;
+
+    text-shadow:
+        0 0 8px rgba(255,0,0,.7),
+        0 0 15px rgba(255,0,0,.5);
+    }
     .container-fluid{
     max-width: 1200px;
     }
@@ -96,6 +103,13 @@ $resultado = $conn->query($sql);
     .titulo{
     font-weight:800;
     font-size:25px;
+    }
+    .titulo span{
+    color:#ff2020;
+
+    text-shadow:
+        0 0 8px rgba(255,0,0,.7),
+        0 0 15px rgba(255,0,0,.5);
     }
 
     table{
@@ -143,7 +157,7 @@ $resultado = $conn->query($sql);
 <div class="topbar">
 
 <div>
-🏃 Estación88 Admin
+🏃 Estación <span>88</span> Admin
 </div>
 
 <div>
@@ -185,7 +199,7 @@ switch($_GET['msg']){
 <div class="d-flex justify-content-between align-items-center mb-4">
 
     <h2 class="titulo">
-        👥 Inscritos Estacion88
+        👥 Inscritos Estacion <span>88</span> 
     </h2>
 
     <a href="dashboard" class="btn btn-success">

@@ -120,7 +120,6 @@ body{
     #350000 35%,
     #120000 65%,
     #050505 100%);
-
     height:100vh;
     display:flex;
     align-items:center;
@@ -139,23 +138,16 @@ body{
     rgba(10,10,10,.96),
     rgba(0,0,0,.96)
     );
-
     width:100%;
     max-width:430px;
-
     padding:35px;
-
     border-radius:28px;
-
     border:2px solid rgba(255,40,40,.8);
-
     box-shadow:
     0 0 15px rgba(255,0,0,.45),
     0 0 60px rgba(255,0,0,.15),
     0 20px 50px rgba(0,0,0,.7);
-
     backdrop-filter:blur(10px);
-
     position:relative;
 }
 
@@ -167,11 +159,8 @@ body{
     left:25px;
     right:25px;
     height:6px;
-
     background:#ff2b2b;
-
     border-radius:30px;
-
     box-shadow:
     0 0 15px #ff0000,
     0 0 35px #ff0000;
@@ -200,7 +189,6 @@ body{
 
 .titulo span{
     color:#ff2020;
-
     text-shadow:
         0 0 8px rgba(255,0,0,.7),
         0 0 15px rgba(255,0,0,.5);
@@ -217,7 +205,6 @@ body{
     font-weight:500;
     text-transform:uppercase;
     letter-spacing:.5px;
-
     display:flex;
     align-items:center;
     justify-content:center;
@@ -235,11 +222,9 @@ body{
         transparent,
         #ff2020
     );
-
     box-shadow:
         0 0 8px rgba(255,0,0,.7);
 }
-
 .subtitulo::after{
     background:linear-gradient(
         90deg,
@@ -247,7 +232,6 @@ body{
         transparent
     );
 }
-
 
 /* =========================
    LABELS
@@ -266,20 +250,13 @@ label{
 .form-control{
 
     background:#070707 !important;
-
     color:#fff !important;
-
     border:2px solid rgba(255,30,30,.85);
-
     border-radius:16px;
-
     padding:14px 16px;
-
     margin-top:6px;
     margin-bottom:15px;
-
     box-shadow:none;
-
     transition:.25s;
 }
 
@@ -290,14 +267,10 @@ label{
 .form-control:focus{
 
     background:#070707;
-
     color:white;
-
     border-color:#ff3d3d;
-
     box-shadow:
     0 0 10px rgba(255,0,0,.25);
-
     outline:none;
 }
 
@@ -308,16 +281,11 @@ label{
 
     width:100%;
     border:none;
-
     padding:16px;
-
     border-radius:18px;
-
     font-weight:900;
     font-size:20px;
-
     color:#fff;
-
     background:
     linear-gradient(
     180deg,
@@ -335,7 +303,6 @@ label{
 .btn-login:hover{
 
     transform:translateY(-2px);
-
     box-shadow:
     0 0 20px rgba(255,0,0,.8),
     0 15px 35px rgba(255,0,0,.35);
@@ -349,23 +316,14 @@ label{
     position:fixed;
     top:20px;
     left:20px;
-
     text-decoration:none;
-
     color:#fff;
-
     padding:10px 16px;
-
     border-radius:12px;
-
     background:rgba(0,0,0,.45);
-
     border:1px solid rgba(255,255,255,.08);
-
     backdrop-filter:blur(10px);
-
     transition:.25s;
-
     z-index:9999;
 }
 
@@ -382,26 +340,17 @@ label{
     position:fixed;
     top:20px;
     right:20px;
-
     z-index:9999;
-
     display:inline-flex;
     align-items:center;
     gap:8px;
-
     padding:10px 16px;
-
     color:#fff;
     text-decoration:none;
-
     border-radius:12px;
-
     background:rgba(0,0,0,.45);
-
     border:1px solid rgba(255,255,255,.08);
-
     backdrop-filter:blur(10px);
-
     transition:.25s;
 }
 
@@ -427,13 +376,11 @@ label{
         max-width:95%;
         padding:25px;
     }
-
     .btn-publico{
         top:65px;
         right:10px;
         font-size:12px;
     }
-
     .back-index{
         left:10px;
         top:10px;

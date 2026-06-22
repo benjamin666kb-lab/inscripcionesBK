@@ -60,7 +60,7 @@ $resultado = $stmt->get_result();
 ========================= */
 
 body{
-    background:linear-gradient(135deg,#0f172a,#1e293b);
+    background: linear-gradient(170deg, #000000, #ff0000);
     min-height:100vh;
     padding:40px 0;
 }
@@ -223,7 +223,7 @@ tbody tr:hover{
 }
 .swipe-hint{
     color:#fff;
-    background:rgba(27, 197, 227, 0.38);
+    background:rgba(28, 88, 252, 0.53);
     border:1px solid rgba(227,27,35,.35);
 
     padding:10px;

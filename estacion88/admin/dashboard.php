@@ -59,8 +59,8 @@ background:#f4f6f9;
     linear-gradient(
         90deg,
         #000000 0%,        
-        #e31b23 50%,        
-        #198754 100%
+        #7c0307 50%,        
+        #c90f0f 100%
     );
 
     color:white;
@@ -85,7 +85,13 @@ background:#f4f6f9;
     letter-spacing:1px;
     color:#fff;
 }
+.topbar span{
+    color:#ff2020;
 
+    text-shadow:
+        0 0 8px rgba(255,0,0,.7),
+        0 0 15px rgba(255,0,0,.5);
+}
 .card-box{
 border:none;
 border-radius:20px;
@@ -191,7 +197,7 @@ font-weight:900;
 <div class="topbar">
 
 <div>
-🏃 Estación88 Admin
+🏃 Estación <span>88</span> Panel
 </div>
 
 <div>
