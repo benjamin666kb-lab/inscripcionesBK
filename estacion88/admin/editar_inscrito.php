@@ -57,7 +57,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 
 <div class="container mt-4">
 
-<h3>✏️ Editar Inscrito</h3>
+<h3>✏️ Editar Inscrito</h3> 
 
 <form method="POST" class="card p-3">
     <input

@@ -36,7 +36,7 @@ $update = $conn->prepare("UPDATE inscritos SET estado_pago='PROCESANDO' WHERE id
 $update->bind_param("i", $id);
 $update->execute();
 
-$monto = intval($inscrito['monto'] * 100);
+$monto = intval(round(((float)$inscrito['monto'] * 1.10) * 100));
 $correo = trim($inscrito['correo']);
 
 $data = [
@@ -88,7 +88,8 @@ if(
     $sql = "
     UPDATE inscritos
     SET
-        estado_pago='PAGADO',        
+        estado_pago='PAGADO',
+        metodo_pago='CULQI',
         cargo_culqi=?,
         fecha_pago=NOW()
     WHERE id=?

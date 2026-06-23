@@ -36,7 +36,7 @@ if(!$inscrito){
 
 }
 $url_ticket =
-"https://inscripcionesbk.free.nf/estacion88/ticket?codigo="
+"https://inscripciones88.free.nf/estacion88/ticket?codigo="
 . urlencode($inscrito['codigo']);
 
 $qr_url =
@@ -65,9 +65,9 @@ body{
 background:
 linear-gradient(
 135deg,
-#43a047,
-#66bb6a,
-#81c784
+#000000,
+#f30901,
+#c78381
 );
 
 min-height:100vh;

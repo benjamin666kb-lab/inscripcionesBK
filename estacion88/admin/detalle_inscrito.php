@@ -261,6 +261,20 @@ S/ <?= number_format((float)$inscrito['monto'], 2); ?>
 </div>
 </div>
 
+<div class="col-md-6 item">
+<div class="label">Metodo de Pago</div>
+<div class="valor">
+<?= htmlspecialchars($inscrito['metodo_pago'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+</div>
+</div>
+
+<div class="col-md-6 item">
+<div class="label">Operacion Yape</div>
+<div class="valor">
+<?= htmlspecialchars($inscrito['numero_operacion_yape'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+</div>
+</div>
+
 <div class="col-md-12 item">
 <div class="label">Fecha Registro</div>
 <div class="valor">
@@ -278,7 +292,7 @@ $estado = strtoupper(trim($inscrito['estado_pago'] ?? ''));
 if(
     $_SESSION['rol'] == 'ADMIN'
     && (float)$inscrito['monto'] > 0
-    && $estado !== 'PAGADO'
+    && in_array($estado, ['PENDIENTE','YAPE_PENDIENTE','REVIEW'], true)
 ){
 ?>
 

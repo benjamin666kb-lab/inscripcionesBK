@@ -53,24 +53,24 @@ $kits = $stmt2->get_result();
 
 <style>
 
-:root{
+    :root{
     --rojo:#e31b23;
     --rojo-hover:#ff3038;
     --negro:#000000;
     --gris:#f5f5f5;
     --texto:#222;
-}
+    }
 
-/* =========================
-   GENERAL
-========================= */
+    /* =========================
+        GENERAL
+    ========================= */
 
-*{
+    *{
     font-family:'Poppins',sans-serif;
     box-sizing:border-box;
-}
+    }
 
-body{
+    body{
     background:
     linear-gradient(
         180deg,
@@ -80,29 +80,26 @@ body{
 
     min-height:100vh;
     padding:50px 0;
-}
+    }
 
-/* =========================
-   TARJETA PRINCIPAL
-========================= */
+        /* =========================
+        TARJETA PRINCIPAL
+        ========================== */
 
-.card-evento{
+    .card-evento{
 
     background:white;
-
     border-radius:24px;
-
     overflow:hidden;
-
     box-shadow:
     0 15px 50px rgba(0,0,0,.35);
-}
+    }
 
-/* =========================
-   CABECERA
-========================= */
+    /* =========================
+        CABECERA
+    ========================= */
 
-.header-evento{
+    .header-evento{
 
     background:
     linear-gradient(
@@ -116,74 +113,71 @@ body{
     padding:45px 35px;
 
     text-align:center;
-}
+    }
 
-.header-evento h1{
+    .header-evento h1{
 
     font-size:clamp(2rem,5vw,3.5rem);
 
     font-weight:900;
 
     margin-bottom:10px;
-}
+    }
 
-.header-evento p{
+    .header-evento p{
 
     font-size:1rem;
 
     opacity:.95;
 
     margin-bottom:0;
-}
+    }
 
-/* =========================
-   FORMULARIO
-========================= */
+    /* =========================
+        FORMULARIO
+        ========================= */
 
-.formulario{
+    .formulario{
     padding:40px;
-}
+    }
 
-/* =========================
-   LABELS
-========================= */
+        /* =========================
+        LABELS
+        ========================= */
 
-.form-label{
+    .form-label{
     font-weight:700;
     color:#222;
-}
+        }
 
-/* =========================
-   INPUTS
-========================= */
+        /* =========================
+        INPUTS
+        ========================= */
 
-.form-control,
-.form-select{
+    .form-control,
+    .form-select{
 
     border:2px solid #e5e5e5;
-
     border-radius:12px;
-
     padding:13px 15px;
-
     transition:.3s;
-}
+    }
 
-.form-control:focus,
-.form-select:focus{
+    .form-control:focus,
+    .form-select:focus{
 
     border-color:var(--rojo);
 
     box-shadow:
     0 0 0 .15rem rgba(227,27,35,.15);
 
-}
+    }
 
-/* =========================
-   BOTON
-========================= */
+    /* =========================
+       BOTON
+    ========================= */
 
-.btn-inscribirse{
+    .btn-inscribirse{
 
     background:var(--rojo);
     border:none;
@@ -194,21 +188,21 @@ body{
     border-radius:50px;
     transition:.3s;
     color:white;
-}
+    }
 
-.btn-inscribirse:hover{
+    .btn-inscribirse:hover{
 
     background:var(--rojo-hover);
     transform:translateY(-2px);
     box-shadow:
     0 10px 25px rgba(227,27,35,.30);
-}
+    }
 
-/* =========================
-   BADGE
-========================= */
+    /* =========================
+        BADGE
+    ========================= */
 
-.badge-evento{
+    .badge-evento{
 
     display:inline-flex;
     align-items:center;
@@ -224,44 +218,37 @@ body{
     0 4px 15px rgba(0,0,0,.08);
     margin-top:15px;
     transition:.3s;
-}
+    }
 
-.badge-evento:hover{
+    .badge-evento:hover{
 
     transform:translateY(-2px);
-
     box-shadow:
     0 8px 20px rgba(227,27,35,.15);
-}
+    }
 
-/* =========================
-   CAJAS INFO
-========================= */
+    /* =========================
+        CAJAS INFO
+    ========================= */
 
-.info-box{
+    .info-box{
 
     background:#ffffff;
-
     border-left:6px solid var(--rojo);
-
     padding:20px;
-
     border-radius:14px;
-
     margin-bottom:25px;
-
     box-shadow:
     0 5px 15px rgba(0, 0, 0, 0.25);
-}
+    }
 
-/* =========================
-   BOTON VOLVER
-========================= */
+    /* =========================
+        BOTON VOLVER
+    ========================= */
 
-.btn-volver{
+    .btn-volver{
 
     position:fixed;
-
     top:20px;
     left:20px;
 
@@ -269,41 +256,30 @@ body{
     rgba(0,0,0,.65);
 
     color:white;
-
     padding:10px 16px;
-
     border-radius:50px;
-
     text-decoration:none;
-
     font-size:13px;
-
     font-weight:700;
-
     border:
     1px solid rgba(255,255,255,.08);
-
     backdrop-filter:blur(8px);
-
     transition:.3s;
-
     z-index:999;
-}
+    }
 
-.btn-volver:hover{
+    .btn-volver:hover{
 
     background:var(--rojo);
-
     color:white;
-
     transform:translateY(-2px);
-}
+    }
 
-/* =========================
-   RESPONSIVE
-========================= */
+    /* =========================
+        RESPONSIVE
+    ========================= */
 
-@media(max-width:768px){
+    @media(max-width:768px){
 
     body{
         padding:20px 10px;
@@ -321,45 +297,35 @@ body{
         font-size:2rem;
     }
     }
-.consent-box{
+    .consent-box{
 
     background:#fff8e1;
-
     border:1px solid #ffe082;
-
     border-left:5px solid #f59e0b;
-
     border-radius:14px;
-
     padding:15px;
-
     margin-top:15px;
-}
+    }
 
-.consent-title{
+    .consent-title{
 
     font-size:14px;
-
     font-weight:700;
-
     color:#92400e;
-
     margin-bottom:10px;
-}
+    }
 
-.consentimiento-texto{
+    .consentimiento-texto{
 
     font-size:13px;
-
     line-height:1.5;
-
     color:#4b5563;
-}
+    }
 
-.form-check-input{
+    .form-check-input{
 
     margin-top:4px;
-}
+    }
 </style>
 
 </head>

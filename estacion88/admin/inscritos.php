@@ -190,6 +190,11 @@ switch($_GET['msg']){
     case 'creado':
         echo "✅ Inscrito registrado correctamente";
         break;
+
+    case 'conciliados':
+        $totalConciliados = (int)($_GET['total'] ?? 0);
+        echo "Pagos Yape conciliados correctamente: " . $totalConciliados;
+        break;
 }
 ?>
 
@@ -231,7 +236,9 @@ switch($_GET['msg']){
 <th>Categoría</th>
 <th>Kit</th>
 <th>Monto</th>
+<th>Metodo</th>
 <th>Estado</th>
+<th>Operacion Yape</th>
 <th>Fecha</th>
 <th>club</th>
 <th>Acciones</th>
@@ -265,18 +272,27 @@ switch($_GET['msg']){
 
 <td>S/ <?= number_format((float)$row['monto'],2); ?></td>
 
+<td><?= htmlspecialchars($row['metodo_pago'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+
 <td>
 <?php
-$estado = strtoupper(trim($row['estado_pago'] ?? 'LIBRE'));
+$estado = strtoupper(trim($row['estado_pago'] ?? ''));
+$esLibre = ($estado === 'LIBRE' || ((float)$row['monto'] <= 0 && $estado !== 'PAGADO'));
 
 if($estado === "PAGADO"){ ?>
     <span class="badge bg-success">PAGADO</span>
 <?php } elseif($estado === "PENDIENTE"){ ?>
     <span class="badge bg-warning text-dark">PENDIENTE</span>
-<?php } else { ?>
+<?php } elseif($estado === "YAPE_PENDIENTE"){ ?>
+    <span class="badge bg-info text-dark">YAPE POR VALIDAR</span>
+<?php } elseif($esLibre){ ?>
     <span class="badge bg-primary">LIBRE</span>
+<?php } else { ?>
+    <span class="badge bg-secondary">PENDIENTE REVISION</span>
 <?php } ?>
 </td>
+
+<td><?= htmlspecialchars($row['numero_operacion_yape'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
 
 <td><?= htmlspecialchars($row['fecha_registro'], ENT_QUOTES, 'UTF-8'); ?></td>
 

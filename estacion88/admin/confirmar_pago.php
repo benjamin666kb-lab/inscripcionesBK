@@ -78,7 +78,14 @@ if (strtoupper($fila['estado_pago']) === 'PAGADO') {
 /* =========================
    ACTUALIZAR PAGO
 ========================= */
-$update = $conn->prepare("UPDATE inscritos SET estado_pago = 'PAGADO' WHERE id = ?");
+$update = $conn->prepare("
+    UPDATE inscritos
+    SET
+        estado_pago = 'PAGADO',
+        fecha_pago = NOW(),
+        metodo_pago = IF(metodo_pago IS NULL OR metodo_pago = '', 'MANUAL', metodo_pago)
+    WHERE id = ?
+");
 if (!$update) {
     die("Error en actualización");
 }

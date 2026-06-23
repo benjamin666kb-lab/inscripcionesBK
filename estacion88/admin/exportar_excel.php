@@ -30,7 +30,8 @@ function xlsx_col($index){
 
 $headers = [
     'ID','Codigo','Nombre','DNI','Telefono','Correo','Edad',
-    'Distancia','Talla','Categoria','Kit','Monto','Estado','Fecha'
+    'Distancia','Talla','Categoria','Kit','Monto','Metodo Pago',
+    'Operacion Yape','Estado','Fecha'
 ];
 
 $rows = [];
@@ -51,6 +52,8 @@ while($row = $result->fetch_assoc()){
         $row['categoria'],
         $row['kit'],
         number_format((float)$row['monto'], 2, '.', ''),
+        $row['metodo_pago'] ?? '',
+        $row['numero_operacion_yape'] ?? '',
         $row['estado_pago'],
         $row['fecha_registro']
     ];

@@ -22,7 +22,15 @@ if($resultado->num_rows == 0){
 }
 
 $inscrito = $resultado->fetch_assoc();
-$estadosBloqueados = ['PAGADO','LIBRE'];
+$estadosBloqueados = ['PAGADO','LIBRE','YAPE_PENDIENTE'];
+$montoBase = (float)$inscrito['monto'];
+$montoCulqi = round($montoBase * 1.10, 2);
+$comisionCulqi = round($montoCulqi - $montoBase, 2);
+
+if($inscrito['estado_pago'] === 'YAPE_PENDIENTE'){
+    header("Location: pago_yape_pendiente?codigo=" . urlencode($inscrito['codigo']));
+    exit;
+}
 
 if(in_array($inscrito['estado_pago'], $estadosBloqueados)){
 
@@ -213,6 +221,65 @@ if(in_array($inscrito['estado_pago'], $estadosBloqueados)){
     transform:translateY(-3px);
 
     }
+    .payment-options{
+    display:grid;
+    gap:14px;
+    margin-top:22px;
+    }
+    .payment-option{
+    border:2px solid #e4e7ec;
+    border-radius:18px;
+    padding:16px;
+    cursor:pointer;
+    transition:.2s;
+    background:#fff;
+    }
+    .payment-option.active{
+    border-color:#00c853;
+    box-shadow:0 10px 25px rgba(0,200,83,.14);
+    }
+    .payment-option input{
+    margin-right:8px;
+    }
+    .payment-title{
+    font-weight:800;
+    color:#1f2933;
+    }
+    .payment-desc{
+    margin:6px 0 0;
+    font-size:13px;
+    color:#64748b;
+    line-height:1.45;
+    }
+    .yape-box{
+    display:none;
+    margin-top:16px;
+    padding:16px;
+    border-radius:18px;
+    background:#f7fbff;
+    border:1px solid #dbeafe;
+    }
+    .yape-box.active{
+    display:block;
+    }
+    .input-operacion{
+    width:100%;
+    border:1px solid #d7dde8;
+    border-radius:12px;
+    padding:12px 14px;
+    font-size:16px;
+    font-weight:600;
+    outline:none;
+    }
+    .input-operacion:focus{
+    border-color:#00c853;
+    box-shadow:0 0 0 4px rgba(0,200,83,.12);
+    }
+    .amount-detail{
+    font-size:13px;
+    color:#5b6675;
+    margin-top:8px;
+    }
     .btn-volver{
     position:fixed;
     top:20px;
@@ -297,13 +364,65 @@ if(in_array($inscrito['estado_pago'], $estadosBloqueados)){
 
         <div class="total">
 
-            <p>Monto a pagar</p>
+            <p>Monto base de inscripcion</p>
 
             <h2>
                 S/ <?php echo number_format($inscrito['monto'],2); ?>
             </h2>
 
         </div>
+
+        <div class="payment-options">
+
+            <label class="payment-option active" data-payment-option="culqi">
+                <input type="radio" name="metodo_pago" value="culqi" checked>
+                <span class="payment-title">Culqi - tarjeta de debito o credito</span>
+                <p class="payment-desc">
+                    Metodo de pago Culqi. Comision 10% del precio total.
+                    Validacion en menos de 1H.
+                </p>
+                <div class="amount-detail">
+                    Total con comision: S/ <?php echo number_format($montoCulqi, 2); ?>
+                    (comision S/ <?php echo number_format($comisionCulqi, 2); ?>)
+                </div>
+            </label>
+
+            <label class="payment-option" data-payment-option="yape">
+                <input type="radio" name="metodo_pago" value="yape">
+                <span class="payment-title">Yape - sin comisiones</span>
+                <p class="payment-desc">
+                    0% comisiones. Validacion en 24 h.
+                </p>
+                <div class="amount-detail">
+                    Total a yapear: S/ <?php echo number_format($montoBase, 2); ?>
+                </div>
+            </label>
+
+        </div>
+
+        <form method="POST" action="procesar_yape" id="formYape" class="yape-box">
+            <input type="hidden" name="id" value="<?php echo (int)$inscrito['id']; ?>">
+
+            <label for="numeroOperacion" class="mb-2">
+                Numero de operacion Yape
+            </label>
+
+            <input
+                type="text"
+                id="numeroOperacion"
+                name="numero_operacion_yape"
+                class="input-operacion"
+                maxlength="40"
+                pattern="[A-Za-z0-9\- ]{4,40}"
+                placeholder="Ingresa el numero de operacion"
+                autocomplete="off">
+
+            <p class="payment-desc">
+                En el mensaje o concepto del pago escribe este codigo:
+                <strong><?php echo htmlspecialchars($inscrito['codigo']); ?></strong>.
+                Despues de enviar el numero, tu pago quedara pendiente para validacion.
+            </p>
+        </form>
 
         <button
         class="btn-pagar"
@@ -323,7 +442,7 @@ const publicKey = <?= json_encode(CULQI_PUBLIC_KEY); ?>;
 const settings = {
     title: <?= json_encode("Shrek Run"); ?>,
     currency: <?= json_encode("PEN"); ?>,
-    amount: <?= json_encode((int)($inscrito['monto'] * 100)); ?>
+    amount: <?= json_encode((int)round($montoCulqi * 100)); ?>
 };
 
 const client = {
@@ -334,9 +453,9 @@ const options = {
     lang: "es",
     paymentMethods: {
         tarjeta: true,
-        yape: true,
-        billetera: true,
-        bancaMovil: true,
+        yape: false,
+        billetera: false,
+        bancaMovil: false,
         agente: false,
         cuotealo: false
     }
@@ -392,10 +511,42 @@ document
 .getElementById("btnPagar")
 .addEventListener("click", function(e){
 
+    const metodo = document.querySelector("input[name='metodo_pago']:checked").value;
+
+    if (metodo === "yape") {
+        const operacion = document.getElementById("numeroOperacion");
+        if (!operacion.value.trim()) {
+            operacion.focus();
+            return;
+        }
+
+        document.getElementById("formYape").submit();
+        return;
+    }
+
     Culqi.open();
 
     e.preventDefault();
 
+});
+
+document.querySelectorAll("input[name='metodo_pago']").forEach(function(input){
+    input.addEventListener("change", function(){
+        document.querySelectorAll(".payment-option").forEach(function(option){
+            option.classList.toggle(
+                "active",
+                option.dataset.paymentOption === input.value
+            );
+        });
+
+        document
+            .getElementById("formYape")
+            .classList
+            .toggle("active", input.value === "yape");
+
+        document.getElementById("btnPagar").textContent =
+            input.value === "yape" ? "REGISTRAR OPERACION YAPE" : "PAGAR AHORA";
+    });
 });
 
 </script>

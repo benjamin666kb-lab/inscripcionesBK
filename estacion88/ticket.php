@@ -33,7 +33,7 @@ if($resultado->num_rows == 0){
 $inscrito = $resultado->fetch_assoc();
 
 $url_ticket =
-"https://inscripcionesbk.free.nf/estacion88/ticket?codigo="
+"https://inscripciones88.free.nf/estacion88/ticket?codigo="
 . urlencode($inscrito['codigo']);
 
 $qr_url =
@@ -43,8 +43,11 @@ $colorEstado = "#dc3545";
 
 $estadoMostrar = strtoupper(trim($inscrito['estado_pago'] ?? ''));
 
-if(empty($estadoMostrar) && $inscrito['monto'] <= 0){
+if((empty($estadoMostrar) || $estadoMostrar === 'LIBRE') && $inscrito['monto'] <= 0){
     $estadoMostrar = "LIBRE";
+}
+elseif(empty($estadoMostrar)){
+    $estadoMostrar = "PENDIENTE";
 }
 
 $colorEstado = "#dc3545";
@@ -54,6 +57,9 @@ if($estadoMostrar=="PAGADO"){
 }
 elseif($estadoMostrar=="PENDIENTE"){
     $colorEstado = "#fd7e14";
+}
+elseif($estadoMostrar=="YAPE_PENDIENTE"){
+    $colorEstado = "#0dcaf0";
 }
 elseif($estadoMostrar=="LIBRE"){
     $colorEstado = "#0d6efd";

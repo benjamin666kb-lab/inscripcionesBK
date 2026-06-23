@@ -5,6 +5,7 @@ if(!isset($_SESSION['id_admin'])){
     header("Location: login");
     exit;
 }
+include("csrf.php");
 include("../../db.php");
 
 // 🔥 Estadísticas
@@ -20,12 +21,15 @@ $pendientes = $conn->query("
 SELECT COUNT(*) total FROM inscritos WHERE estado_pago='PENDIENTE'
 ")->fetch_assoc();
 
+$yapePendientes = $conn->query("
+SELECT COUNT(*) total FROM inscritos WHERE estado_pago='YAPE_PENDIENTE'
+")->fetch_assoc();
+
 $libres = $conn->query("
 SELECT COUNT(*) total 
 FROM inscritos 
-WHERE estado_pago IS NULL 
-   OR estado_pago = '' 
-   OR UPPER(TRIM(estado_pago)) NOT IN ('PAGADO','PENDIENTE')
+WHERE UPPER(TRIM(estado_pago)) = 'LIBRE'
+   OR monto <= 0
 ")->fetch_assoc();
 
 ?>
@@ -188,6 +192,23 @@ font-weight:900;
 
     box-shadow:0 6px 15px rgba(25,135,84,.10);
 }
+.upload-yape{
+    background:#fff;
+    border:1px solid #e2e8f0;
+    border-radius:16px;
+    padding:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+    margin-bottom:22px;
+}
+.upload-yape h5{
+    margin:0 0 8px;
+    font-weight:800;
+}
+.upload-yape p{
+    margin:0 0 14px;
+    color:#64748b;
+    font-size:14px;
+}
 </style>
 
 </head>
@@ -219,7 +240,7 @@ Salir
 <div class="row">
 
 <!-- INSCRITOS -->
-<div class="col-md-3 mb-3">
+<div class="col-md-2 mb-3">
 <div class="card card-box">
 <div class="card-body text-center">
 <div class="numero">
@@ -231,7 +252,7 @@ Salir
 </div>
 
 <!-- PAGADOS -->
-<div class="col-md-3 mb-3">
+<div class="col-md-2 mb-3">
 <div class="card card-box">
 <div class="card-body text-center">
 <div class="numero text-success">
@@ -243,7 +264,7 @@ Salir
 </div>
 
 <!-- PENDIENTES -->
-<div class="col-md-3 mb-3">
+<div class="col-md-2 mb-3">
 <div class="card card-box">
 <div class="card-body text-center">
 <div class="numero text-warning">
@@ -254,8 +275,20 @@ Salir
 </div>
 </div>
 
+<!-- YAPE PENDIENTES -->
+<div class="col-md-2 mb-3">
+<div class="card card-box">
+<div class="card-body text-center">
+<div class="numero text-info">
+<?php echo $yapePendientes['total']; ?>
+</div>
+<div>Yape por validar</div>
+</div>
+</div>
+</div>
+
 <!-- LIBRES -->
-<div class="col-md-3 mb-3">
+<div class="col-md-2 mb-3">
 <div class="card card-box">
 <div class="card-body text-center">
 <div class="numero text-primary">
@@ -269,6 +302,42 @@ Salir
 </div>
 
 <hr>
+<?php if(in_array($_SESSION['rol'], ['ADMIN','OPERADOR'])){ ?>
+
+<div class="upload-yape">
+    <<h5>Conciliacion Yape</h5>
+    <p>
+        Sube el Excel exportado desde Yape para contrastarlo con las operaciones registradas.
+    </p>
+
+    <form method="POST"
+          action="conciliacion_yape"
+          enctype="multipart/form-data"
+          class="row g-2 align-items-center">
+
+        <input type="hidden"
+               name="csrf_token"
+               value="<?= $_SESSION['csrf_token']; ?>">
+
+        <div class="col-md-8">
+            <input type="file"
+                   name="archivo_yape"
+                   class="form-control"
+                   accept=".xlsx,.csv"
+                   required>
+        </div>
+
+        <div class="col-md-4">
+            <button type="submit"
+                    class="btn btn-primary w-100">
+                Subir Excel Yape
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<?php } ?>
 
 <!-- BOTONES DE ACCIÓN -->
 <div class="menu-acciones">
@@ -306,7 +375,7 @@ Salir
 </div>
 
 <?php } ?>
-<a href="https://inscripcionesbk.free.nf/estacion88/index"
+<a href="https://inscripciones88.free.nf/estacion88/index"
    class="btn-publico"
    target="_blank">
     🌐 Ver Estación88 -> Eventos

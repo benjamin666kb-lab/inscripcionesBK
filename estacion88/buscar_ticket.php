@@ -181,6 +181,13 @@ tbody tr{
     border-radius:20px;
     font-weight:700;
 }
+.badge-yape{
+    background:rgba(14,165,233,.15);
+    color:#0284c7;
+    padding:8px 12px;
+    border-radius:20px;
+    font-weight:700;
+}
 
 /* =========================
    BOTONES (IDENTIDAD ROJA)
@@ -325,6 +332,7 @@ No se encontraron inscripciones para ese DNI.
 
 <?php
 $estado = strtoupper(trim($row['estado_pago']));
+$esLibre = ($estado === 'LIBRE');
 
 if($estado == "PAGADO"){
     echo '<span class="badge-pagado">PAGADO</span>';
@@ -332,8 +340,14 @@ if($estado == "PAGADO"){
 elseif($estado == "PENDIENTE"){
     echo '<span class="badge-pendiente">PENDIENTE</span>';
 }
-else{
+elseif($estado == "YAPE_PENDIENTE"){
+    echo '<span class="badge-yape">YAPE POR VALIDAR</span>';
+}
+elseif($esLibre){
     echo '<span class="badge-libre">LIBRE</span>';
+}
+else{
+    echo '<span class="badge-pendiente">PENDIENTE REVISION</span>';
 }
 ?>
 
@@ -345,13 +359,45 @@ else{
 
 <td>
 
+<?php
+
+$estado = strtoupper(trim($row['estado_pago']));
+
+if($estado === 'PAGADO' || $estado === 'LIBRE'){
+
+?>
+
 <a
 href="ticket?codigo=<?= urlencode($row['codigo']) ?>"
-class="btn btn-primary btn-ticket">
-
+class="btn btn-success btn-ticket">
 Ver Ticket
-
 </a>
+
+<?php
+
+}elseif($estado === 'YAPE_PENDIENTE'){
+
+?>
+
+<a
+href="pago_yape_pendiente?codigo=<?= urlencode($row['codigo']) ?>"
+class="btn btn-info btn-ticket">
+Ver Estado
+</a>
+
+<?php
+
+}else{
+
+?>
+
+<a
+href="checkout?id=<?= (int)$row['id'] ?>"
+class="btn btn-warning btn-ticket">
+Completar Pago
+</a>
+
+<?php } ?>
 
 </td>
 
