@@ -396,7 +396,7 @@ Llena tus datos correctamente para participar oficialmente en el evento.
 
 <div class="col-md-6 mb-3">
 <label class="form-label">Teléfono</label>
-<input type="text" name="telefono" class="form-control" required>
+<input type="text" name="telefono" maxlength="9" class="form-control" required>
 </div>
 <!--MENSAJED DE ALERTA!!--><!--MENSAJED DE ALERTA!!--><!--MENSAJED DE ALERTA!!-->
 <div id="mensaje-alerta" style="color:red;font-weight:600;margin-bottom:10px;"></div>

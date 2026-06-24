@@ -305,7 +305,7 @@ Salir
 <?php if(in_array($_SESSION['rol'], ['ADMIN','OPERADOR'])){ ?>
 
 <div class="upload-yape">
-    <<h5>Conciliacion Yape</h5>
+    <h5>Conciliacion Yape</h5>
     <p>
         Sube el Excel exportado desde Yape para contrastarlo con las operaciones registradas.
     </p>
@@ -375,7 +375,7 @@ Salir
 </div>
 
 <?php } ?>
-<a href="https://inscripciones88.free.nf/estacion88/index"
+<a href="https://inscripcionesbk.free.nf/estacion88/index"
    class="btn-publico"
    target="_blank">
     🌐 Ver Estación88 -> Eventos

@@ -33,7 +33,7 @@ if($resultado->num_rows == 0){
 $inscrito = $resultado->fetch_assoc();
 
 $url_ticket =
-"https://inscripciones88.free.nf/estacion88/ticket?codigo="
+"https://inscripcionesbk.free.nf/estacion88/ticket?codigo="
 . urlencode($inscrito['codigo']);
 
 $qr_url =

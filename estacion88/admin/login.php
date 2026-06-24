@@ -446,7 +446,7 @@ label{
 <a href="../index" class="back-index">
 ← Volver al inicio
 </a>
-<a href="https://inscripciones88.free.nf/estacion88/index"
+<a href="https://inscripcionesbk.free.nf/estacion88/index"
    class="btn-publico"
    target="_blank">
     🌐 Ver Estación88 -> Eventos
