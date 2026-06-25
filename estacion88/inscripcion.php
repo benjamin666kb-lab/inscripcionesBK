@@ -109,51 +109,38 @@ $kits = $stmt2->get_result();
     );
 
     color:white;
-
     padding:45px 35px;
-
     text-align:center;
     }
 
     .header-evento h1{
 
     font-size:clamp(2rem,5vw,3.5rem);
-
     font-weight:900;
-
     margin-bottom:10px;
     }
-
     .header-evento p{
 
     font-size:1rem;
-
     opacity:.95;
-
     margin-bottom:0;
     }
-
     /* =========================
         FORMULARIO
         ========================= */
-
     .formulario{
     padding:40px;
     }
-
         /* =========================
         LABELS
         ========================= */
-
     .form-label{
     font-weight:700;
     color:#222;
         }
-
         /* =========================
         INPUTS
         ========================= */
-
     .form-control,
     .form-select{
 
@@ -162,21 +149,17 @@ $kits = $stmt2->get_result();
     padding:13px 15px;
     transition:.3s;
     }
-
     .form-control:focus,
     .form-select:focus{
 
     border-color:var(--rojo);
-
     box-shadow:
     0 0 0 .15rem rgba(227,27,35,.15);
 
     }
-
     /* =========================
        BOTON
     ========================= */
-
     .btn-inscribirse{
 
     background:var(--rojo);
@@ -390,13 +373,29 @@ Llena tus datos correctamente para participar oficialmente en el evento.
 </div>
 
 <div class="col-md-6 mb-3">
-<label class="form-label">DNI</label>
-<input type="text" name="dni" maxlength="8" class="form-control" required>
+    <label class="form-label">DNI</label>
+    <input
+        type="text"
+        name="dni"
+        maxlength="8"
+        class="form-control"
+        inputmode="numeric"
+        pattern="[0-9]{8}"
+        oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+        required>
 </div>
 
 <div class="col-md-6 mb-3">
-<label class="form-label">Teléfono</label>
-<input type="text" name="telefono" maxlength="9" class="form-control" required>
+    <label class="form-label">Teléfono</label>
+    <input
+        type="text"
+        name="telefono"
+        maxlength="9"
+        class="form-control"
+        inputmode="numeric"
+        pattern="[0-9]{9}"
+        oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+        required>
 </div>
 <!--MENSAJED DE ALERTA!!--><!--MENSAJED DE ALERTA!!--><!--MENSAJED DE ALERTA!!-->
 <div id="mensaje-alerta" style="color:red;font-weight:600;margin-bottom:10px;"></div>
@@ -454,19 +453,34 @@ data-precio="<?php echo $k['precio']; ?>">
 <!-- 🔥 CATEGORIAS -->
 <div class="col-md-4 mb-3">
 <label class="form-label">Categoría</label>
-<select name="categoria" class="form-select" required>
-<option value="">Seleccione</option>
-<option value="adolescente">Adolescentes (14 +) TEEN</option>
-<option value="joven">Joven (18 +)</option>
-<option value="master">Master (40 +)</option>
-<option value="super_master">Super Master (50 +)</option>
+
+<select id="categoria" name="categoria" class="form-select" required>
+    <option value="">Seleccione</option>
+    <option value="adolescente">Adolescentes (14 - 18)</option>
+    <option value="joven">Joven (18 - 40)</option>
+    <option value="master">Master (40 - 50)</option>
+    <option value="super_master">Super Master (50 - 75)</option>
 </select>
+
 </div>
 
 <!-- 🔥 EDAD -->
 <div class="col-md-4 mb-3">
 <label class="form-label">Edad</label>
-<input type="number" name="edad" min="1" max="100" class="form-control" required>
+
+<input
+    type="number"
+    id="edad"
+    name="edad"
+    class="form-control"
+    min="14"
+    max="75"
+    placeholder="Seleccione una categoría primero"
+    disabled
+    required>
+
+<small id="edadInfo" class="text-muted"></small>
+
 </div>
 <!-- 🔥 DISTANCIA  -->
 <div class="col-md-4 mb-3">
@@ -653,6 +667,93 @@ document.addEventListener("DOMContentLoaded", () => {
         .addEventListener("change", validarKitGratis);
 
     validarKitGratis();
+
+});
+</script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    const categoria = document.getElementById("categoria");
+    const edad = document.getElementById("edad");
+    const edadInfo = document.getElementById("edadInfo");
+
+    categoria.addEventListener("change", function(){
+
+        edad.value = "";
+
+        if(this.value === ""){
+            edad.disabled = true;
+            edadInfo.innerHTML = "";
+            return;
+        }
+
+        edad.disabled = false;
+
+        switch(this.value){
+
+            case "adolescente":
+                edad.min = 14;
+                edad.max = 18;
+                edad.value = 14;
+                edadInfo.innerHTML = "Edad permitida: 14 a 18 años";
+                break;
+
+            case "joven":
+                edad.min = 18;
+                edad.max = 40;
+                edad.value = 18;
+                edadInfo.innerHTML = "Edad permitida: 18 a 40 años";
+                break;
+
+            case "master":
+                edad.min = 40;
+                edad.max = 50;
+                edad.value = 40;
+                edadInfo.innerHTML = "Edad permitida: 40 a 50 años";
+                break;
+
+            case "super_master":
+                edad.min = 50;
+                edad.max = 75;
+                edad.value = 50;
+                edadInfo.innerHTML = "Edad permitida: 50 a 75 años";
+                break;
+        }
+
+    });
+
+    edad.addEventListener("input", function(){
+
+        this.value = this.value.replace(/[^0-9]/g,'');
+
+        if(this.value.length > 2){
+            this.value = this.value.slice(0,2);
+        }
+
+        const valor = parseInt(this.value);
+
+        if(!isNaN(valor)){
+
+            const min = parseInt(this.min);
+            const max = parseInt(this.max);
+
+            if(valor < min || valor > max){
+
+                alert(
+                    "La edad debe estar entre "
+                    + min +
+                    " y "
+                    + max +
+                    " años para esta categoría."
+                );
+
+                this.value = "";
+            }
+        }
+
+    });
 
 });
 

@@ -75,9 +75,15 @@ $prefijo = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $evento_nombre), 0,
 // 🔥 GENERAR CÓDIGO FINAL
 $codigo = $prefijo . "-" . date("Y") . "-" . strtoupper(substr(md5(uniqid()), 0, 6));
 
-$dni = trim(preg_replace('/\s+/', '', $dni));
-$telefono = trim(preg_replace('/\s+/', '', $telefono));
+$dni = preg_replace('/\D/', '', trim($dni));
+$telefono = preg_replace('/\D/', '', trim($telefono));
+if(strlen($dni) != 8){
+    die("DNI inválido");
+}
 
+if(strlen($telefono) != 9){
+    die("Teléfono inválido");
+}
 
 // 🔥 INSERT INSCRIPCIÓN
 $sql = "INSERT INTO inscritos

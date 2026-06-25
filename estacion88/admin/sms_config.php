@@ -1,0 +1,4 @@
+<?php
+
+define('SMS_GATEWAY_URL', 'URL_DEL_GATEWAY');
+define('SMS_GATEWAY_TOKEN', 'TOKEN_DEL_GATEWAY');

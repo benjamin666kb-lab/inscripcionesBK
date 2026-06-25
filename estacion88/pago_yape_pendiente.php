@@ -60,7 +60,7 @@ body{
     <div class="card-body p-4 p-md-5 text-center">
         <h1 class="h3 mb-3">Pago Yape registrado</h1>
         <p class="text-muted">
-            Tu inscripcion quedo pendiente de validacion. Revisaremos la operacion en un plazo de 24 h.
+            Tu inscripcion quedo pendiente de validacion. Revisaremos la operacion en un plazo de 6h.
         </p>
 
         <div class="row text-start mt-4">

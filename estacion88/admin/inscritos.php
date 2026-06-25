@@ -1,6 +1,5 @@
 <?php
 
- 
 include("sesion_check.php");
 if(!isset($_SESSION['id_admin'])){
     header("Location: login");
@@ -8,6 +7,9 @@ if(!isset($_SESSION['id_admin'])){
 }
 include("csrf.php");
 include("../../db.php");
+
+$whatsapp_urls = $_SESSION['whatsapp_urls'] ?? [];
+unset($_SESSION['whatsapp_urls']);
 
 // 🔐 ROLES NORMALIZADOS
 $rol = strtoupper($_SESSION['rol']);
@@ -396,6 +398,12 @@ pageLength:10
 });
 
 </script>
-
+<?php if(!empty($whatsapp_urls)){ ?>
+<script>
+<?php foreach($whatsapp_urls as $url){ ?>
+window.open("<?= $url ?>", "_blank");
+<?php } ?>
+</script>
+<?php } ?>
 </body>
 </html>
